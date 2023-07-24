@@ -48,7 +48,9 @@ Verify that two buckets called jmeter and jmeter2 exist with the following comma
 ```
   Note: for the checkpointing process, the container must have the same amount amount of memory and CPU as used in production.
 
-6. Setup grafana:
+6. Push the images for AcmeAir and mongodb to the OCP private repository
+
+7. Setup grafana:
  Create a persistent volume for your data with:
 `podman volume create grafana-storage`
 and verify that the volume was created correctly with
@@ -56,7 +58,7 @@ and verify that the volume was created correctly with
 Start the grafana container with:
 `startGrafana.sh`
 
-7. Using the UI, configure grafana to get data from influxdb.
+8. Using the UI, configure grafana to get data from influxdb.
   Create two data sources, , one for each influxdb bucket.
   - Type: influxdb
   - Query Language ==> Flux
@@ -68,15 +70,15 @@ Start the grafana container with:
   - Token: o9ceP5FUCKNluez0il8rucFE5lsd4exc1CPf3hu7MJoaSsNnsvNnYIfB_LJqpuCopa646K9SFiPQslR-OIPxGw==
   - Default bucket: jmeter (or jmeter2, depending on which bucket I want to track)
 
-8. Load the dashboard in grafana
+9. Load the dashboard in grafana
 
-9. Go to the Knative directory
-9.1 Deploy mongodb with `kubectl apply -f Mongo.yaml`
-9.2 Deploy Semeru Cloud Compiler with `kybectl apply -f JITServer`
-9.3 Deploy the default AcmeAir instance with `kubectl apply -f AcmeAirKN_default.yaml`
-9.4 Deploy the AcmeAir instance with SemeruCloudCompiler and JITServer: `kubectl apply -f AcmeAirKN.yaml`
+10. Go to the Knative directory
+10.1 Deploy mongodb with `kubectl apply -f Mongo.yaml`
+10.2 Deploy Semeru Cloud Compiler with `kybectl apply -f JITServer`
+10.3 Deploy the default AcmeAir instance with `kubectl apply -f AcmeAirKN_default.yaml`
+10.4 Deploy the AcmeAir instance with SemeruCloudCompiler and JITServer: `kubectl apply -f AcmeAirKN.yaml`
 
-10. Apply load with JMeter and watch the throughput results in grafana
+11. Apply load with JMeter and watch the throughput results in grafana
 
 
 

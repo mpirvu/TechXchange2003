@@ -1,14 +1,13 @@
 # Dockerfile to build a jmeter container able to drive acmeair
 # Results appear on /output in the container
 # Must specify the hostname for the acmeair application (or localhost will be assumed)
-
-FROM docker.io/eclipse-temurin:17.0.6_10-jre-focal
+FROM icr.io/appcafe/ibm-semeru-runtimes:open-17-jdk-ubi
 
 ENV JMETER_VERSION 5.5
 
 # Install pre-requisite packages
-RUN apt-get update && apt-get install -y --no-install-recommends wget unzip \
-       && rm -rf /var/lib/apt/lists/*
+USER root
+RUN yum -y install wget unzip
 
 # Install jmeter 
 RUN   mkdir /jmeter \
@@ -25,7 +24,7 @@ ENV JMETER_HOME="/jmeter/apache-jmeter-$JMETER_VERSION"
 ENV PATH="$JMETER_HOME/bin:$PATH"
 
 # Set JVM options
-ENV JVM_ARGS "-Xms1g -Xmx1g"
+ENV JVM_ARGS "-Xtune:virtualized -Xshareclasses:none -Xms1g -Xmx1g"
 
 # We should set summariser.interval=6 in bin/jmeter.properties
 RUN echo 'summariser.interval=6' >> $JMETER_HOME/bin/jmeter.properties
