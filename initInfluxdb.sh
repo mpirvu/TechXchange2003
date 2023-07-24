@@ -30,5 +30,5 @@ podman run -it --rm -p 8086:8086 \
       -e DOCKER_INFLUXDB_INIT_BUCKET=jmeter \
       -e DOCKER_INFLUXDB_INIT_RETENTION=1d \
       -e DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=o9ceP5FUCKNluez0il8rucFE5lsd4exc1CPf3hu7MJoaSsNnsvNnYIfB_LJqpuCopa646K9SFiPQslR-OIPxGw== \
-      docker.io/influxdb:2.2.0
+      quay.io/influxdb/influxdb:2.2.0
 #Press Ctrl-C to terminate this process
