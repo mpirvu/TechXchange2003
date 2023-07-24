@@ -1,1 +1,88 @@
-# TechXchange2003
+# TechXchange2023
+
+This repository contains artifacts to demonstrate some of the benefits
+of Semeru Cloud Compiler (aka OpenJ9 JITServer).
+
+Go to the directory for the demo (/home/ibmuser/JITServerDemo/TeckXchange2023)
+and perform the following steps (NOTE! all "9.46.81.11" addresses from scripts need to be change to the IP of the machine where the demo is running):
+
+
+
+1. Execute the `initInfluxdb.sh` script
+This starts the influxdb container in setup mode to create user, password, bucket, token.
+Two directories are created, `data` and `config` and they will persist data for influx database.
+Note that the `organization` and `token` created at this step must match the one from `.jmx` file used by JMeter.
+
+
+2. Execute the `startInflux.sh` script to start the influxdb container in normal operation mode.
+Verify the influxdb container is up and running with
+`podman ps -a | grep influxdb`
+
+Create another bucket by executing the following command:
+`podman exec influxdb influx bucket create -n jmeter2 -o IBM -r 1d`
+
+Verify that two buckets called jmeter and jmeter2 exist with the following command:
+`podman exec influxdb influx bucket list`
+
+
+3. Create the JMeter container:
+```
+   cd BuildImages/JMeterContext
+   ./build_jmeter.sh
+    cd ../..
+```
+
+4. Create the mongodb container
+```
+  cd BuildImages/MongoContext
+  ./build_mongo.sh
+  cd ../..
+```
+
+5. Create the two AcmeAir containers.
+```
+   cd BuildImages/LibertyContext
+   ./build_acmeair.sh
+   ./checkpoint.sh
+   cd ../..
+```
+  Note: for the checkpointing process, the container must have the same amount amount of memory and CPU as used in production.
+
+6. Setup grafana:
+ Create a persistent volume for your data with:
+`podman volume create grafana-storage`
+and verify that the volume was created correctly with
+`podman volume inspect grafana-storage`
+Start the grafana container with:
+`startGrafana.sh`
+
+7. Using the UI, configure grafana to get data from influxdb.
+  Create two data sources, , one for each influxdb bucket.
+  - Type: influxdb
+  - Query Language ==> Flux
+  - URL: http://YOUR_INFLUXDB_IP:8086
+  - Access: server
+  - Skip TLS verify
+  - Basic auth details: admin/Administrat0r
+  - Organization: IBM
+  - Token: o9ceP5FUCKNluez0il8rucFE5lsd4exc1CPf3hu7MJoaSsNnsvNnYIfB_LJqpuCopa646K9SFiPQslR-OIPxGw==
+  - Default bucket: jmeter (or jmeter2, depending on which bucket I want to track)
+
+8. Load the dashboard in grafana
+
+9. Go to the Knative directory
+9.1 Deploy mongodb with `kubectl apply -f Mongo.yaml`
+9.2 Deploy Semeru Cloud Compiler with `kybectl apply -f JITServer`
+9.3 Deploy the default AcmeAir instance with `kubectl apply -f AcmeAirKN_default.yaml`
+9.4 Deploy the AcmeAir instance with SemeruCloudCompiler and JITServer: `kubectl apply -f AcmeAirKN.yaml`
+
+10. Apply load with JMeter and watch the throughput results in grafana
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,5 @@
 #!/bin/bash
-# This script only needs to be executed once to create initialize the 
+# This script only needs to be executed once to create initialize the
 # influx database and create the user, organization, token and bucket
 # The script creates two directories, "data" and "config", and maps
 # them inside the influxdb container for persistence.
@@ -30,5 +30,5 @@ podman run -it --rm -p 8086:8086 \
       -e DOCKER_INFLUXDB_INIT_BUCKET=jmeter \
       -e DOCKER_INFLUXDB_INIT_RETENTION=1d \
       -e DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=o9ceP5FUCKNluez0il8rucFE5lsd4exc1CPf3hu7MJoaSsNnsvNnYIfB_LJqpuCopa646K9SFiPQslR-OIPxGw== \
-      influxdb:2.2.0
+      docker.io/influxdb:2.2.0
 #Press Ctrl-C to terminate this process
