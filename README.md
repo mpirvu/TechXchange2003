@@ -4,7 +4,7 @@ This repository contains artifacts to demonstrate some of the benefits
 of Semeru Cloud Compiler (aka OpenJ9 JITServer).
 
 Go to the directory for the demo (/home/ibmuser/JITServerDemo/TeckXchange2023)
-and perform the following steps (NOTE! all "9.46.81.11" addresses from scripts need to be change to the IP of the machine where the demo is running):
+and perform the following steps (NOTE! Use the `searchReplaceIPAddress.sh` script to change all "9.46.81.11" addresses from bash scripts to the IP of the machine where the demo is running):
 
 
 
