@@ -74,11 +74,15 @@ Start the grafana container with:
 
 10. Go to the Knative directory
 10.1 Deploy mongodb with `kubectl apply -f Mongo.yaml`
-10.2 Deploy Semeru Cloud Compiler with `kybectl apply -f JITServer`
-10.3 Deploy the default AcmeAir instance with `kubectl apply -f AcmeAirKN_default.yaml`
-10.4 Deploy the AcmeAir instance with SemeruCloudCompiler and JITServer: `kubectl apply -f AcmeAirKN.yaml`
+10.2 Find the mongodb pod with `kubectl get pods | grep mongo` and restore the database with `.\mongoRestore MONGOPOD`
+10.3 Deploy Semeru Cloud Compiler with `kubectl apply -f JITServer`
+10.4 Deploy the default AcmeAir instance with `kubectl apply -f AcmeAirKN_default.yaml`
+10.5 Deploy the AcmeAir instance with SemeruCloudCompiler and JITServer: `kubectl apply -f AcmeAirKN.yaml`
 
-11. Apply load with JMeter and watch the throughput results in grafana
+11. Apply load
+11.1 Find the external address of the two AcmeAir services (`kubetctl get all`)
+11.2 Change the `runJMeter.sh` script to replace the two addresses of JHOST with the addresses found above
+11.3 Execite `./runJMeter.sh` and watch the throughput results in grafana
 
 
 
