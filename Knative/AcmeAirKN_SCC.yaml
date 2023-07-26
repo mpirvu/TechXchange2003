@@ -19,16 +19,11 @@ spec:
         autoscaling.knative.dev/max-scale: "2"
     spec:
       containers:
-        #- image: localhost:32000/liberty-acmeair-ee8:23.0.0.6
-      - image: localhost:32000/liberty-acmeair-ee8:23.0.0.6-instanton
+      - image: localhost:32000/liberty-acmeair-ee8:23.0.0.6
         imagePullPolicy: Always
         name: acmeair-scc
         env:
         - name: JVM_ARGS
-          #value: "-Xjit:enableJITServerHeuristics -Xaot:disableGuardedCountingRecompilation -XX:+UseJITServer -XX:JITServerAddress=jitserver -XX:+JITServerUseAOTCache"
-          value: "-XX:+UseJITServer -XX:JITServerAddress=jitserver"
-            #value: ""
-        - name: OPENJ9_RESTORE_JAVA_OPTIONS
           value: "-XX:+UseJITServer -XX:JITServerAddress=jitserver"
         - name: MONGO_HOST
           value: "mongodb"
@@ -49,17 +44,7 @@ spec:
           httpGet:
             path: /
             port: 9080
-          initialDelaySeconds: 1 
+          initialDelaySeconds: 5 
           periodSeconds: 1
           failureThreshold: 10
-        securityContext:
-          allowPrivilegeEscalation: true
-          runAsNonRoot: true
-          capabilities:
-            add:
-              - SETPCAP
-              - CHECKPOINT_RESTORE
-            drop:
-              - ALL
-
 

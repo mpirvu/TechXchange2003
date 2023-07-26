@@ -1,13 +1,13 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: acmeair-baseline
+  name: acmeair-sccio
   namespace: default
 spec:
   template:
     metadata:
       labels:
-        app.kubernetes.io/instance: acmeair-baseline
+        app.kubernetes.io/instance: acmeair-sccio
       annotations:
         # This is what we say that a single pod should be able to handle. 
         autoscaling.knative.dev/target: "20"
@@ -19,12 +19,14 @@ spec:
         autoscaling.knative.dev/max-scale: "2"
     spec:
       containers:
-      - image: localhost:32000/liberty-acmeair-ee8:23.0.0.6
+      - image: localhost:32000/liberty-acmeair-ee8:23.0.0.6-instanton
         imagePullPolicy: Always
-        name: acmeair-baseline
+        name: acmeair-sccio
         env:
         - name: JVM_ARGS
-          value: ""
+          value: "-XX:+UseJITServer -XX:JITServerAddress=jitserver"
+        - name: OPENJ9_RESTORE_JAVA_OPTIONS
+          value: "-XX:+UseJITServer -XX:JITServerAddress=jitserver"
         - name: MONGO_HOST
           value: "mongodb"
         - name: MONGO_PORT
@@ -44,8 +46,17 @@ spec:
           httpGet:
             path: /
             port: 9080
-          initialDelaySeconds: 5 
+          initialDelaySeconds: 1 
           periodSeconds: 1
           failureThreshold: 10
+        securityContext:
+          allowPrivilegeEscalation: true
+          runAsNonRoot: true
+          capabilities:
+            add:
+              - SETPCAP
+              - CHECKPOINT_RESTORE
+            drop:
+              - ALL
 
 
