@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jitserver 
+  name: jitserver
   labels:
     app: jitserver
 spec:
@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: jitserver
-        image: localhost:32000/liberty-acmeair-ee8:23.0.0.6-instanton
+        image: image-registry.openshift-image-registry.svc:5000/default/liberty-acmeair-ee8:23.0.0.6-instanton
         imagePullPolicy: IfNotPresent
         # Instruct the OpenJ9 JVM to start in server mode
         args: ["jitserver"]
