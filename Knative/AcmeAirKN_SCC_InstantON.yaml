@@ -9,7 +9,7 @@ spec:
       labels:
         app.kubernetes.io/instance: acmeair-sccio
       annotations:
-        # This is what we say that a single pod should be able to handle. 
+        # This is what we say that a single pod should be able to handle.
         autoscaling.knative.dev/target: "20"
         # Agregate the metrics over 30 seconds
         autoscaling.knative.dev/window: "30s"
@@ -19,7 +19,7 @@ spec:
         autoscaling.knative.dev/max-scale: "2"
     spec:
       containers:
-      - image: localhost:32000/liberty-acmeair-ee8:23.0.0.6-instanton
+      - image: limage-registry.openshift-image-registry.svc:5000/default/liberty-acmeair-ee8:23.0.0.6-instanton
         imagePullPolicy: Always
         name: acmeair-sccio
         env:
@@ -46,7 +46,7 @@ spec:
           httpGet:
             path: /
             port: 9080
-          initialDelaySeconds: 1 
+          initialDelaySeconds: 1
           periodSeconds: 1
           failureThreshold: 10
         securityContext:

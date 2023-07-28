@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: mongo
-        image: localhost:32000/mongo-acmeair:5.0.17
+        image: image-registry.openshift-image-registry.svc:5000/default/mongo-acmeair:5.0.17
         imagePullPolicy: IfNotPresent
         args: ["--nojournal"]
         ports:
