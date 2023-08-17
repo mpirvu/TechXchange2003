@@ -8,10 +8,17 @@ fi
 
 old_ip="$1"
 new_ip="$2"
+changes=0
+
 
 # Find all .sh files in the current directory and its subdirectories
-find . -type f -name "*.sh" | while read -r file; do
-    # Call the replace_ip_in_file function for each .sh file
-    sed -i "s/$old_ip/$new_ip/g" "$file"
+targetFiles=$(find . -type f -name "*.sh")
+for file in $targetFiles; do
+	if grep -q "$old_ip" "$file"; then
+		sed -i "s/$old_ip/$new_ip/g" "$file"
+		changes=$((changes + 1))
+	fi
 done
+echo "Changed $changes files to replace $old_ip with $new_ip"
+
 
