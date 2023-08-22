@@ -4,16 +4,10 @@ This repository contains artifacts to demonstrate some of the benefits
 of Semeru Cloud Compiler (aka OpenJ9 JITServer).
 
 
-
-
-0. Login as root using the provided password:
-  `su --login root`
-   Password: password
-
-Login to OCP
-
-Switch to the "default" namespace:
-   `oc project default`
+Login as root using the provided password:
+```
+su --login root
+```
 
 Clone the repository
 ```
@@ -22,6 +16,7 @@ git clone https://github.com/mpirvu/TechXchange2023.git
 cd TechXchange2023
 ```
 
+Then follow the instructions below.
 
 1. Find the IP of the current machine with `ifconfig`. It should be something like "10.xxx.xxx.xxx".
    Then use the `./searchReplaceIPAddress.sh` script to change all "9.46.81.11" addresses from bash scripts to the IP of the current machine.
@@ -49,14 +44,12 @@ cd TechXchange2023
    podman exec influxdb influx bucket list
    ```
 
-
 3. Create the JMeter container:
    ```
    cd BuildImages/JMeterContext
    ./build_jmeter.sh
    cd ../..
    ```
-
 
 4. Create the mongodb container
    ```
@@ -65,7 +58,6 @@ cd TechXchange2023
    cd ../..
    ```
 
-
 5. Create the two AcmeAir containers (with and without InstantON).
    ```
    cd BuildImages/LibertyContext
@@ -73,7 +65,6 @@ cd TechXchange2023
    ./checkpoint.sh
    cd ../..
    ```
-
 
 6. Push the images for AcmeAir and mongodb to the OCP private repository
    ```
@@ -118,18 +109,28 @@ cd TechXchange2023
 
 
 10. Deploy the services in OCP
-    1. Go to the Knative directory:
+    1. Login to ocp as ocadmin by going to `https://console-openshift-console.apps.ocp.ibm.edu`
+
+       Once logged in in the top right click "ocadmin" and select "Copy login command".
+       Press "Display Token" and copy the top command and paste it into your terminal.
+
+    2. Switch to the "default" namespace:
+       ```
+       oc project default
+       ```
+
+    3. Go to the Knative directory:
        ```
        cd Knative
        ```
 
-    2. Validate that yaml files have the correct images specified:
+    4. Validate that yaml files have the correct images specified:
        ```
        grep "image:" *.yaml
        ```
        The image should start with `image-registry.openshift-image-registry.svc:5000/` followed by the name of the project where the images were pushed (`default`) and followed by the image name and tag.
 
-    3. Deploy mongodb:
+    5. Deploy mongodb:
        ```
        kubectl apply -f Mongo.yaml
        ```
@@ -138,12 +139,12 @@ cd TechXchange2023
        kubectl get pods | grep mongodb
        ```
 
-    4. Restore the mongo database:
+    6. Restore the mongo database:
        ```
        ./mongoRestore.sh
        ```
 
-    5. Deploy Semeru Cloud Compiler:
+    7. Deploy Semeru Cloud Compiler:
        ```
        kubectl apply -f JITServer.yaml
        ```
@@ -152,28 +153,52 @@ cd TechXchange2023
        kubectl get pods | grep jitserver
        ```
 
-    6. Deploy the default AcmeAir instance:
+    8. Deploy the default AcmeAir instance:
        ```
        kubectl apply -f AcmeAirKN_default.yaml
        ```
        A message should appear in the console saying that the service was created.
 
-    7. Deploy the AcmeAir instance with Semeru Cloud Compiler:
+    9. Deploy the AcmeAir instance with Semeru Cloud Compiler:
        ```
        kubectl apply -f AcmeAirKN_SCC.yaml
        ```
-       OR
+       Note: if you want to deploy the AcmeAir instance with Semeru Cloud Compiler and InstantON instead, then follow these steps:
 
-       Deploy the AcmeAir instance with Semeru Cloud Compiler and InstantON:
-       ```
-       kubectl apply -f AcmeAirKN_SCC_InstantON.yaml
-       ```
+       1. Edit the KNative permissions to allow to add Capabilities (if not already done)
+          ```
+          kubectl -n knative-serving edit cm config-features -oyaml
+          ```
+          and add the following line under `data:`
+          ```
+          kubernetes.containerspec-addcapabilities: enabled
+          ```
+          Save the file and exit the editor.
 
-    8. Verify that 4 pods are running:
-       ```
-       kubectl get pods
-       ```
+       2. Create a Service Account named `instanton-sa`:
+          ```
+          oc create serviceaccount instanton-sa
+          ```
 
+       3. Create a Security Context Constraint named `cap-cr-scc`:
+          ```
+          oc apply -f scc-cap-cr.yaml
+          ```
+
+       4. Add the `instanton-sa` Service Account to the `cap-cr-scc` Security Context Constraint:
+          ```
+          oc adm policy add-scc-to-user cap-cr-scc -z instanton-sa
+          ```
+
+       5. Deploy the AcmeAir instance with Semeru Cloud Compiler and InstantON:
+          ```
+          kubectl apply -f AcmeAirKN_SCC_InstantON.yaml
+          ```
+
+    10. Verify that 4 pods are running:
+        ```
+        kubectl get pods
+        ```
 
 11. Apply external load
     1. Find the external address of the two AcmeAir services. Use
@@ -182,6 +207,10 @@ cd TechXchange2023
        ```
        and extract the part that comes after "http://" or "https://" and use it as the address of the service.
        It should be something like `acmeair-baseline-default.apps.ocp.ibm.edu` and `acmeair-scc-default.apps.ocp.ibm.edu` (or `acmeair-sccio-default.apps.ocp.ibm.edu` for the service with InstantON)
+       The same information can be obtained with `kn` if installed:
+       ```
+       kn service list
+       ```
 
     2. Verify that the `runJMeter.sh` script contains these service addresses for the JHOST environment variable passed to the JMeter containers:
        ```
@@ -202,6 +231,8 @@ cd TechXchange2023
        ```
 
     4. Go to the grafana dashboard you configured before and watch the throughput results for the two services.
+
+       The AcmeAirEE8 service with Semeru Cloud Compiler should reach peak throughput much faster than the baseline service.
 
 
 12. Cleanup
