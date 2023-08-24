@@ -67,6 +67,12 @@ Then follow the instructions below.
    ```
 
 6. Push the images for AcmeAir and mongodb to the OCP private repository
+
+   Login to ocp as ocadmin by going to `https://console-openshift-console.apps.ocp.ibm.edu`.
+
+   Once logged in in the top right click "ocadmin" and select "Copy login command".
+   Press "Display Token" and copy the top command and paste it into your terminal.
+   Then continue with the commands below:
    ```
 	oc registry login --insecure=true
 	oc patch configs.imageregistry.operator.openshift.io/cluster --patch '{"spec":{"defaultRoute":true}}' --type=merge
@@ -109,28 +115,24 @@ Then follow the instructions below.
 
 
 10. Deploy the services in OCP
-    1. Login to ocp as ocadmin by going to `https://console-openshift-console.apps.ocp.ibm.edu`
 
-       Once logged in in the top right click "ocadmin" and select "Copy login command".
-       Press "Display Token" and copy the top command and paste it into your terminal.
-
-    2. Switch to the "default" namespace:
+    1. Switch to the "default" namespace:
        ```
        oc project default
        ```
 
-    3. Go to the Knative directory:
+    2. Go to the Knative directory:
        ```
        cd Knative
        ```
 
-    4. Validate that yaml files have the correct images specified:
+    3. Validate that yaml files have the correct images specified:
        ```
        grep "image:" *.yaml
        ```
        The image should start with `image-registry.openshift-image-registry.svc:5000/` followed by the name of the project where the images were pushed (`default`) and followed by the image name and tag.
 
-    5. Deploy mongodb:
+    4. Deploy mongodb:
        ```
        kubectl apply -f Mongo.yaml
        ```
@@ -139,12 +141,12 @@ Then follow the instructions below.
        kubectl get pods | grep mongodb
        ```
 
-    6. Restore the mongo database:
+    5. Restore the mongo database:
        ```
        ./mongoRestore.sh
        ```
 
-    7. Deploy Semeru Cloud Compiler:
+    6. Deploy Semeru Cloud Compiler:
        ```
        kubectl apply -f JITServer.yaml
        ```
@@ -153,13 +155,13 @@ Then follow the instructions below.
        kubectl get pods | grep jitserver
        ```
 
-    8. Deploy the default AcmeAir instance:
+    7. Deploy the default AcmeAir instance:
        ```
        kubectl apply -f AcmeAirKN_default.yaml
        ```
        A message should appear in the console saying that the service was created.
 
-    9. Deploy the AcmeAir instance with Semeru Cloud Compiler:
+    8. Deploy the AcmeAir instance with Semeru Cloud Compiler:
        ```
        kubectl apply -f AcmeAirKN_SCC.yaml
        ```
@@ -195,10 +197,10 @@ Then follow the instructions below.
           kubectl apply -f AcmeAirKN_SCC_InstantON.yaml
           ```
 
-    10. Verify that 4 pods are running:
-        ```
-        kubectl get pods
-        ```
+    9. Verify that 4 pods are running:
+       ```
+       kubectl get pods
+       ```
 
 11. Apply external load
     1. Find the external address of the two AcmeAir services. Use
