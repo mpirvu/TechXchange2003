@@ -68,28 +68,72 @@ Then follow the instructions below.
 
 6. Push the images for AcmeAir and mongodb to the OCP private repository
 
-   Login to ocp as ocadmin by going to `https://console-openshift-console.apps.ocp.ibm.edu`.
+   Login to the OCP console, using the following URL:
 
-   Once logged in in the top right click "ocadmin" and select "Copy login command".
-   Press "Display Token" and copy the top command and paste it into your terminal.
-   Then continue with the commands below:
+   ```bash
+   https://console-openshift-console.apps.ocp.ibm.edu
    ```
-	oc registry login --insecure=true
-	oc patch configs.imageregistry.operator.openshift.io/cluster --patch '{"spec":{"defaultRoute":true}}' --type=merge
-	oc get secrets -n openshift-image-registry | grep cluster-image-registry-operator-token
-	export OCP_REGISTRY_PASSWORD=$(oc get secret -n openshift-image-registry cluster-image-registry-operator-token-<GET NAME FROM PREVIOUS COMMAND> -o=jsonpath='{.data.token}{"\n"}' | base64 -d)
-	export OCP_REGISTRY_HOST=$(oc get route default-route -n openshift-image-registry --template='{{ .spec.host }}')
 
-	podman login -p $OCP_REGISTRY_PASSWORD -u kubeadmin $OCP_REGISTRY_HOST --tls-verify=false
+   Use username: `ocadmin` and provided password.
 
-	podman tag localhost/mongo-acmeair:5.0.17 $(oc registry info)/$(oc project -q)/mongo-acmeair:5.0.17
-	podman push $(oc registry info)/$(oc project -q)/mongo-acmeair:5.0.17 --tls-verify=false
+   From the OCP console UI, click the username in the top right corner, and select `Copy login command`.
 
-	podman tag localhost/liberty-acmeair-ee8:23.0.0.6 $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6
-	podman push $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6 --tls-verify=false
+   ![ocp-cli-login](DocImages/ocp-cli-login.png)
 
-	podman tag localhost/liberty-acmeair-ee8:23.0.0.6-instanton $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6-instanton
-	podman push $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6-instanton --tls-verify=false
+   Press `Display Token` and copy the `Log in with this token` command.
+
+   ![ocp-cli-token](DocImages/ocp-cli-token.png)
+
+   Paste the command into your terminal window. You should receive a confirmation message that you are logged in.
+
+   Once logged in, log in to the OCP registry:
+   ```
+   oc registry login --insecure=true
+   ```
+
+   Enable the default registry route in OCP to push images to its internal repos
+
+   ```
+   oc patch configs.imageregistry.operator.openshift.io/cluster --patch '{"spec":{"defaultRoute":true}}' --type=merge
+   ```
+
+   Log Podman into the OCP registry server
+
+   First we need to get the `TOKEN` that we can use to get the password for the registry.
+
+   ```
+   oc get secrets -n openshift-image-registry | grep cluster-image-registry-operator-token
+   ```
+
+   Take note of the `TOKEN` value, as you need to substitute it in the following command that sets the registry password.
+
+   ```
+   export OCP_REGISTRY_PASSWORD=$(oc get secret -n openshift-image-registry cluster-image-registry-operator-token-<INPUT_TOKEN> -o=jsonpath='{.data.token}{"\n"}' | base64 -d)
+   ```
+
+   Now set the OCP registry host value.
+
+   ```
+   export OCP_REGISTRY_HOST=$(oc get route default-route -n openshift-image-registry --template='{{ .spec.host }}')
+   ```
+
+   Finally, we have the values needed for podman to login into the OpenShift registry server.
+
+   ```
+   podman login -p $OCP_REGISTRY_PASSWORD -u kubeadmin $OCP_REGISTRY_HOST --tls-verify=false
+   ```
+
+   Now tag and push the images for AcmeAir and mongodb to the OCP private repository.
+
+   ```
+   podman tag localhost/mongo-acmeair:5.0.17 $(oc registry info)/$(oc project -q)/mongo-acmeair:5.0.17
+   podman push $(oc registry info)/$(oc project -q)/mongo-acmeair:5.0.17 --tls-verify=false
+
+   podman tag localhost/liberty-acmeair-ee8:23.0.0.6 $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6
+   podman push $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6 --tls-verify=false
+
+   podman tag localhost/liberty-acmeair-ee8:23.0.0.6-instanton $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6-instanton
+   podman push $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6-instanton --tls-verify=false
    ```
 
 7. Start the grafana container:
