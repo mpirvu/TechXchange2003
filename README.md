@@ -2,6 +2,19 @@
 
 This repository contains artifacts to demonstrate some of the benefits
 of Semeru Cloud Compiler (aka OpenJ9 JITServer).
+The architecture of the experiment is shown in this picture:
+https://user-images.githubusercontent.com/22594880/263785198-80770ab2-7f3f-402b-9894-ec0bf7b7472c.png
+
+The application used as a benchmark is AcmeAirEE8, a Java EE8 application that implements an airline reservation system and runs on top of OpenLiberty.
+There are two deployments of this application: one that can offload JIT compilations to a Semeru Cloud Compiler service (the one depicted at the bottom)
+and one that does not benefit from Semeru Cloud Compiler (the one depicted at the top).
+We will refer to these two deployments as "AcmeAir Baseline" and "AcmeAir with Semeru Cloud Compiler" respectively.
+Both deployments use the same database (mongodb).
+Load is applied to both deployments using two identical JMeter containers.
+Throughput values are sent by the JMeter instances to an influxdb database and from there to a grafana container to be displayed in a dashboard.
+The two AcmeAir deployments together with the Semeru Cloud Compiler service and mongodb service are deployed in OpenShift and use Knative to scale up and down based on the load.
+The rest of the pods (for JMeter, influxdb and grafana) run outside of OpenShift on a separate machine.
+
 
 
 Login as root using the provided password:
