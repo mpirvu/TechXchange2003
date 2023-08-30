@@ -17,7 +17,7 @@ The rest of the pods (for JMeter, influxdb and grafana) run outside of OpenShift
 
 
 
-Login as root using the provided password:
+Login as root using the password provided in the Lab Guide:
 ```
 su --login root
 ```
@@ -25,7 +25,11 @@ su --login root
 Clone the repository
 ```
 cd /home/ibmuser/Lab-SCC
+```
+```
 git clone https://github.com/mpirvu/TechXchange2023.git
+```
+```
 cd TechXchange2023
 ```
 
@@ -60,22 +64,36 @@ Then follow the instructions below.
 3. Create the JMeter container:
    ```
    cd BuildImages/JMeterContext
+   ```
+   ```
    ./build_jmeter.sh
+   ```
+   ```
    cd ../..
    ```
 
 4. Create the mongodb container
    ```
    cd BuildImages/MongoContext
+   ```
+   ```
    ./build_mongo.sh
+   ```
+   ```
    cd ../..
    ```
 
 5. Create the two AcmeAir containers (with and without InstantON).
    ```
    cd BuildImages/LibertyContext
+   ```
+   ```
    ./build_acmeair.sh
+   ```
+   ```
    ./checkpoint.sh
+   ```
+   ```
    cd ../..
    ```
 
@@ -87,7 +105,7 @@ Then follow the instructions below.
    https://console-openshift-console.apps.ocp.ibm.edu
    ```
 
-   Use username: `ocadmin` and provided password.
+   Use username: `ocadmin` and the corresponding password provided in the Lab Guide.
 
    From the OCP console UI, click the username in the top right corner, and select `Copy login command`.
 
@@ -140,12 +158,20 @@ Then follow the instructions below.
 
    ```
    podman tag localhost/mongo-acmeair:5.0.17 $(oc registry info)/$(oc project -q)/mongo-acmeair:5.0.17
+   ```
+   ```
    podman push $(oc registry info)/$(oc project -q)/mongo-acmeair:5.0.17 --tls-verify=false
-
+   ```
+   ```
    podman tag localhost/liberty-acmeair-ee8:23.0.0.6 $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6
+   ```
+   ```
    podman push $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6 --tls-verify=false
-
+   ```
+   ```
    podman tag localhost/liberty-acmeair-ee8:23.0.0.6-instanton $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6-instanton
+   ```
+   ```
    podman push $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6-instanton --tls-verify=false
    ```
 
@@ -161,7 +187,11 @@ Then follow the instructions below.
    Note: There are two pre-configured datasources called InfluxDB and InfluxDB2. However, the IP address of these datasources needs to be adjusted.
 
    To configure the datasources, select the gear from the left side menu, then select "Data sources", then select the data source you want to configure (InfluxDB or InfluxDB2).
-   Change the "URL" of the data source to the IP machine that runs InfluxDB (this was determined in Step 1 using `ifconfig`). Then press "Save & Test" (at the bottom of the screen)to validate the connection.
+   For the "URL" field of the data source, change the existing IP (9.46.81.11) to the IP machine that runs InfluxDB (this was determined in Step 1 using `ifconfig`).
+
+   ![grafana-source](DocImages/GrafanaSource.png)
+
+   Then press "Save & Test" (at the bottom of the screen)to validate the connection.
    Make sure you change both data sources.
 
 
@@ -258,6 +288,7 @@ Then follow the instructions below.
        ```
        kubectl get pods
        ```
+       Note: Knative will terminate the AcmeAir pods automatically after about two minutes of inactivity. This does not affect the experiment.
 
 11. Apply external load
     1. Find the external address of the two AcmeAir services. Use
@@ -286,6 +317,8 @@ Then follow the instructions below.
        After 10 seconds or so, validate that there are no errors with
        ```
        podman logs jmeter1
+       ```
+       ```
        podman logs jmeter2
        ```
 
