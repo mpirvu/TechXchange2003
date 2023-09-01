@@ -3,7 +3,8 @@
 This repository contains artifacts to demonstrate some of the benefits
 of Semeru Cloud Compiler (aka OpenJ9 JITServer).
 The architecture of the experiment is shown in this picture:
-https://user-images.githubusercontent.com/22594880/263785198-80770ab2-7f3f-402b-9894-ec0bf7b7472c.png
+
+![architecture](DocImages/architecture.png)
 
 The application used as a benchmark is AcmeAirEE8, a Java EE8 application that implements an airline reservation system and runs on top of OpenLiberty.
 There are two deployments of this application: one that can offload JIT compilations to a Semeru Cloud Compiler service (the one depicted at the bottom)
@@ -260,7 +261,13 @@ Then follow the instructions below.
           ```
           and add the following line under `data:`
           ```
-          kubernetes.containerspec-addcapabilities: enabled
+            kubernetes.containerspec-addcapabilities: enabled
+          ```
+          The result should look like this:
+          ```
+          data:
+            kubernetes.containerspec-addcapabilities: enabled
+            _example: |-
           ```
           Save the file and exit the editor.
 
