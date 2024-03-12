@@ -25,7 +25,7 @@ su --login root
 
 Clone the repository
 ```
-cd /home/ibmuser/Lab-SCC
+cd /home/techzone/Lab-SCC
 ```
 ```
 git clone https://github.com/mpirvu/TechXchange2023.git
@@ -157,24 +157,29 @@ Then follow the instructions below.
 
    Now tag and push the images for AcmeAir and mongodb to the OCP private repository.
 
-   ```
-   podman tag localhost/mongo-acmeair:5.0.17 $(oc registry info)/$(oc project -q)/mongo-acmeair:5.0.17
-   ```
-   ```
-   podman push $(oc registry info)/$(oc project -q)/mongo-acmeair:5.0.17 --tls-verify=false
-   ```
-   ```
-   podman tag localhost/liberty-acmeair-ee8:23.0.0.6 $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6
-   ```
-   ```
-   podman push $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6 --tls-verify=false
-   ```
-   ```
-   podman tag localhost/liberty-acmeair-ee8:23.0.0.6-instanton $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6-instanton
-   ```
-   ```
-   podman push $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6-instanton --tls-verify=false
-   ```
+   - mongo-acmeair image
+
+   > ```bash
+   > podman tag localhost/mongo-acmeair:5.0.17 $(oc registry info)/$(oc project -q)/mongo-acmeair:5.0.17
+   > 
+   > podman push $(oc registry info)/$(oc project -q)/mongo-acmeair:5.0.17 --tls-verify=false
+   > ```
+
+   - liberty-acmeair-ee8 image
+
+   > ```bash
+   > podman tag localhost/liberty-acmeair-ee8:23.0.0.6 $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6
+   > 
+   > podman push $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6 --tls-verify=false
+   > ```
+
+   - liberty-acmeair-ee8 instantOn image
+
+   > ```bash
+   > podman tag localhost/liberty-acmeair-ee8:23.0.0.6-instanton $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6-instanton
+   > 
+   > podman push $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6-instanton --tls-verify=false
+   > ```
 
 7. Start the grafana container:
    ```
@@ -187,7 +192,7 @@ Then follow the instructions below.
 
    Note: There are two pre-configured datasources called InfluxDB and InfluxDB2. However, the IP address of these datasources needs to be adjusted.
 
-   To configure the datasources, select the gear from the left side menu, then select "Data sources", then select the data source you want to configure (InfluxDB or InfluxDB2).
+   To configure the datasources, select the gear (Configuration) from the left side menu, then select "Data sources", then select the data source you want to configure (InfluxDB or InfluxDB2).
    For the "URL" field of the data source, change the existing IP (9.46.81.11) to the IP machine that runs InfluxDB (this was determined in Step 1 using `ifconfig`).
 
    ![grafana-source](DocImages/GrafanaSource.png)
@@ -204,9 +209,11 @@ Then follow the instructions below.
 
 10. Deploy the services in OCP
 
-    1. Switch to the "default" namespace:
+    1. Create and switch to the "project-[Your initial]" namespace:
        ```
-       oc project default
+       oc new-project project-[Your initial]
+
+       oc project project-[Your initial]
        ```
 
     2. Go to the Knative directory:
@@ -271,9 +278,9 @@ Then follow the instructions below.
           ```
           Save the file and exit the editor.
 
-       2. Create a Service Account named `instanton-sa`:
+       2. Create a Service Account named `instanton-sa-[Your Initial]`:
           ```
-          oc create serviceaccount instanton-sa
+          oc create serviceaccount instanton-sa-[Your Initial]
           ```
 
        3. Create a Security Context Constraint named `cap-cr-scc`:
@@ -283,7 +290,7 @@ Then follow the instructions below.
 
        4. Add the `instanton-sa` Service Account to the `cap-cr-scc` Security Context Constraint:
           ```
-          oc adm policy add-scc-to-user cap-cr-scc -z instanton-sa
+          oc adm policy add-scc-to-user cap-cr-scc -z instanton-sa-[Your Initial]
           ```
 
        5. Deploy the AcmeAir instance with Semeru Cloud Compiler and InstantON:
