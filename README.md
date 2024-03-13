@@ -209,13 +209,13 @@ Then follow the instructions below.
 
 10. Deploy the services in OCP
       
-      > **NOTE**: If you are working on a cluster that is shared with others, please ensure that you are using a unique project name. We recommend using the format sccProject- followed by your initials. For example, sccProject-rm.
+      > **NOTE**: If you are working on a cluster that is shared with others, please ensure that you are using a unique project name. We recommend using the format sccproject- followed by your initials. For example, sccproject-rm.
 
-    1. Create and switch to the "sccProject-[Your initial]" namespace:
+    1. Create and switch to the "sccproject-[Your initial]" namespace:
        ```
-       oc new-project sccProject-[Your initial]
+       oc new-project sccproject-[Your initial]
 
-       oc project sccProject-[Your initial]
+       oc project sccproject-[Your initial]
        ```
 
     2. Go to the Knative directory:
@@ -231,7 +231,7 @@ Then follow the instructions below.
 
     4. Deploy mongodb:
 
-      > **NOTE**: If you are working on a cluster that is shared with others, please ensure that you are using a unique project name. We recommend using the format sccProject- followed by your initials. For example, sccProject-rm.
+      > **NOTE**: If you are working on a cluster that is shared with others, please ensure that you are using a unique project name. We recommend using the format sccproject- followed by your initials. For example, sccproject-rm.
 
        ```
        kubectl apply -f Mongo.yaml
