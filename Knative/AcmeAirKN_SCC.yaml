@@ -2,7 +2,7 @@ apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: acmeair-scc
-  namespace: default
+  namespace: sccProject-[Your initial]
 spec:
   template:
     metadata:
@@ -19,7 +19,7 @@ spec:
         autoscaling.knative.dev/max-scale: "2"
     spec:
       containers:
-      - image: image-registry.openshift-image-registry.svc:5000/default/liberty-acmeair-ee8:23.0.0.6
+      - image: image-registry.openshift-image-registry.svc:5000/sccProject-[Your initial]/liberty-acmeair-ee8:23.0.0.6
         imagePullPolicy: Always
         name: acmeair-scc
         env:

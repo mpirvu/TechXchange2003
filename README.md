@@ -34,6 +34,12 @@ git clone https://github.com/mpirvu/TechXchange2023.git
 cd TechXchange2023
 ```
 
+> **NOTE**: If you prefer to use an IDE to view the project, you can run VSCode with admin privileges using the following command: 
+> ```bash
+> sudo code --no-sandbox --user-data-dir /home/techzone
+> ```
+
+
 Then follow the instructions below.
 
 1. Find the IP of the current machine with `ifconfig`. It should be something like "10.xxx.xxx.xxx".
@@ -230,6 +236,9 @@ Then follow the instructions below.
        The image should start with `image-registry.openshift-image-registry.svc:5000/` followed by the name of the project where the images were pushed (`default`) and followed by the image name and tag.
 
     4. Deploy mongodb:
+
+      > **NOTE**: If you are working on a cluster that is shared with others, please ensure that you are using a unique project name. We recommend using the format sccProject- followed by your initials. For example, sccProject-rm.
+
        ```
        kubectl apply -f Mongo.yaml
        ```
@@ -253,12 +262,21 @@ Then follow the instructions below.
        ```
 
     7. Deploy the default AcmeAir instance:
+
+      **IMPORTANT**: Please ensure to fill in all [Your initial] fields with the namespace used in the creation step above before proceeding to apply the YAML file.
+      ```bash
+      sudo code --no-sandbox --user-data-dir /home/techzone
+      ```
+
        ```
        kubectl apply -f AcmeAirKN_default.yaml
        ```
        A message should appear in the console saying that the service was created.
 
     8. Deploy the AcmeAir instance with Semeru Cloud Compiler:
+
+      **IMPORTANT**: Please ensure to fill in all [Your initial] fields with the namespace used in the creation step above before proceeding to apply the YAML file.
+
        ```
        kubectl apply -f AcmeAirKN_SCC.yaml
        ```
@@ -296,6 +314,9 @@ Then follow the instructions below.
           ```
 
        5. Deploy the AcmeAir instance with Semeru Cloud Compiler and InstantON:
+            
+          **IMPORTANT**: Please ensure to fill in all [Your initial] fields with the namespace used in the creation step above before proceeding to apply the YAML file.
+
           ```
           kubectl apply -f AcmeAirKN_SCC_InstantON.yaml
           ```
@@ -319,10 +340,13 @@ Then follow the instructions below.
        ```
 
     2. Verify that the `runJMeter.sh` script contains these service addresses for the JHOST environment variable passed to the JMeter containers:
+
+       **IMPORTANT**: Please ensure to fill in all [Your initial] fields with the namespace used in the creation step above before proceeding to run the runJMeter.sh file.
+
        ```
        cat runJMeter.sh | grep JHOST
        ```
-       Note: if you selected to start the `AcmeAirKN_SCC_InstantON` service instead of `AcmeAirKN_SCC`, then edit `runJMeter.sh` to comment out the second container invocation (the one with JHOST="acmeair-scc-default.apps.ocp.ibm.edu") and remove the comment from the third container invocation (the one with JHOST="acmeair-sccio-default.apps.ocp.ibm.edu").
+       **Note**: if you selected to start the `AcmeAirKN_SCC_InstantON` service instead of `AcmeAirKN_SCC`, then edit `runJMeter.sh` to comment out the second container invocation (the one with JHOST="acmeair-scc-default.apps.ocp.ibm.edu") and remove the comment from the third container invocation (the one with JHOST="acmeair-sccio-default.apps.ocp.ibm.edu").
 
     3. Launch jmeter containers:
        ```
