@@ -265,9 +265,6 @@ Then follow the instructions below.
     6. Deploy the default AcmeAir instance:
 
       **IMPORTANT**: Please ensure to fill in all [Your initial] fields with the namespace used in the creation step above before proceeding to apply the YAML file.
-      ```bash
-      sudo code --no-sandbox --user-data-dir /home/techzone
-      ```
 
        ```
        kubectl apply -f AcmeAirKN_default.yaml
@@ -284,20 +281,27 @@ Then follow the instructions below.
        Note: if you want to deploy the AcmeAir instance with Semeru Cloud Compiler and InstantON instead, then follow these steps:
 
        1. Edit the KNative permissions to allow to add Capabilities (if not already done)
-          ```
-          kubectl -n knative-serving edit cm config-features -oyaml
-          ```
-          and add the following line under `data:`
-          ```
-            kubernetes.containerspec-addcapabilities: enabled
-          ```
-          The result should look like this:
-          ```
-          data:
-            kubernetes.containerspec-addcapabilities: enabled
-            _example: |-
-          ```
-          Save the file and exit the editor.
+
+          To confirm whether the `containerspec-addcapabilities` is enabled, you can inspect the current configuration of `config-features` by executing the command 
+
+            > ```bash 
+            > kubectl -n knative-serving get cm config-features -oyaml | grep -c "kubernetes.containerspec-addcapabilities: enabled" && echo "true" || echo "false"
+            > ```
+
+            > **IMPORTANT**: If the command returns true, it indicates that the Knative 'containerspec-addcapabilities' feature is already enabled. Please skip the step regarding editing Knative permissions. However, if it returns false, please proceed with the subsequent step to enable the feature.
+
+            >>  ### Edit the Knative permissions to allow to the ability to add Capabilities
+
+            >>  ```bash
+            >>  kubectl -n knative-serving edit cm config-features -oyaml
+            >>  ```
+
+            >>  Add in the following line just bellow the “data” tag at the top:
+            >>  ```yaml
+            >>  kubernetes.containerspec-addcapabilities: enabled
+            >>  ```
+
+            >> **IMPORTANT**: to save your change and exit the file, hit the escape key, then type `:x`. If you received the message `Edit cancelled, no changes made`, it may indicate that the Knative service has already been edited and the same changes applied. 
 
        2. Create a Service Account named `instanton-sa-[Your Initial]`:
           ```
