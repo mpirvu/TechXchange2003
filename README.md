@@ -118,7 +118,17 @@ Then follow the instructions below.
 
    Paste the command into your terminal window. You should receive a confirmation message that you are logged in.
 
-   Once logged in, log in to the OCP registry:
+   Once logged in, create and switch to the "sccproject-[Your initial]" namespace:
+
+   > **NOTE**: If you are working on a cluster that is shared with others, please ensure that you are using a unique project name. We recommend using the format sccproject- followed by your initials. For example, sccproject-rm.
+   
+   ```
+   oc new-project sccproject-[Your initial]
+
+   oc project sccproject-[Your initial]
+   ```
+
+   After that, log in to the OCP registry:
    ```
    oc registry login --insecure=true
    ```
@@ -181,6 +191,12 @@ Then follow the instructions below.
    > podman push $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6-instanton --tls-verify=false
    > ```
 
+   - Verify the images have been pushed to the OpenShift image repository
+
+   > ```bash
+   > oc get imagestream
+   > ```
+
 7. Start the grafana container:
    ```
    ./startGrafana.sh
@@ -208,28 +224,19 @@ Then follow the instructions below.
 
 
 10. Deploy the services in OCP
-      
-      > **NOTE**: If you are working on a cluster that is shared with others, please ensure that you are using a unique project name. We recommend using the format sccproject- followed by your initials. For example, sccproject-rm.
 
-    1. Create and switch to the "sccproject-[Your initial]" namespace:
-       ```
-       oc new-project sccproject-[Your initial]
-
-       oc project sccproject-[Your initial]
-       ```
-
-    2. Go to the Knative directory:
+    1. Go to the Knative directory:
        ```
        cd Knative
        ```
 
-    3. Validate that yaml files have the correct images specified:
+    2. Validate that yaml files have the correct images specified:
        ```
        grep "image:" *.yaml
        ```
        The image should start with `image-registry.openshift-image-registry.svc:5000/` followed by the name of the project where the images were pushed (`default`) and followed by the image name and tag.
 
-    4. Deploy mongodb:
+    3. Deploy mongodb:
 
       > **NOTE**: If you are working on a cluster that is shared with others, please ensure that you are using a unique project name. We recommend using the format sccproject- followed by your initials. For example, sccproject-rm.
 
@@ -241,12 +248,12 @@ Then follow the instructions below.
        kubectl get pods | grep mongodb
        ```
 
-    5. Restore the mongo database:
+    4. Restore the mongo database:
        ```
        ./mongoRestore.sh
        ```
 
-    6. Deploy Semeru Cloud Compiler:
+    5. Deploy Semeru Cloud Compiler:
        ```
        kubectl apply -f JITServer.yaml
        ```
@@ -255,7 +262,7 @@ Then follow the instructions below.
        kubectl get pods | grep jitserver
        ```
 
-    7. Deploy the default AcmeAir instance:
+    6. Deploy the default AcmeAir instance:
 
       **IMPORTANT**: Please ensure to fill in all [Your initial] fields with the namespace used in the creation step above before proceeding to apply the YAML file.
       ```bash
@@ -267,7 +274,7 @@ Then follow the instructions below.
        ```
        A message should appear in the console saying that the service was created.
 
-    8. Deploy the AcmeAir instance with Semeru Cloud Compiler:
+    7. Deploy the AcmeAir instance with Semeru Cloud Compiler:
 
       **IMPORTANT**: Please ensure to fill in all [Your initial] fields with the namespace used in the creation step above before proceeding to apply the YAML file.
 
@@ -315,7 +322,7 @@ Then follow the instructions below.
           kubectl apply -f AcmeAirKN_SCC_InstantON.yaml
           ```
 
-    9. Verify that 4 pods are running:
+    8. Verify that 4 pods are running:
        ```
        kubectl get pods
        ```
