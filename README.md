@@ -106,13 +106,7 @@ Then follow the instructions below.
 
 6. Push the images for AcmeAir and mongodb to the OCP private repository
 
-   Login to the OCP console, using the following URL:
-
-   ```bash
-   https://console-openshift-console.apps.ocp.ibm.edu
-   ```
-
-   Use username: `ocadmin` and the corresponding password provided in the Lab Guide.
+   **IMPORTANT**: Login to the OCP console, using the desktop URL provided in the TechZone OCP server reservation.
 
    From the OCP console UI, click the username in the top right corner, and select `Copy login command`.
 
@@ -341,7 +335,7 @@ Then follow the instructions below.
 
     2. Verify that the `runJMeter.sh` script contains these service addresses for the JHOST environment variable passed to the JMeter containers:
 
-       **IMPORTANT**: Please ensure to fill in all [Your initial] fields with the namespace used in the creation step above before proceeding to run the runJMeter.sh file.
+       **IMPORTANT**: Please ensure to fill in all fields marked as [Your initial] with the namespace used in the creation step above, and fill in all fields marked as [OCP server name] with the OCP server address you created with TechZone (see the example in the comments mentioned in the runJMeter.sh file) before proceeding to run the runJMeter.sh file.
 
        ```
        cat runJMeter.sh | grep JHOST
