@@ -127,7 +127,7 @@ Then follow the instructions below.
 
    oc project sccproject-[Your initial]
 
-   export $CURRENT_NS=sccproject-[Your initial]
+   export CURRENT_NS=sccproject-[Your initial]
    ```
 
    After that, log in to the OCP registry:
@@ -226,15 +226,14 @@ Then follow the instructions below.
 
 
 10. Deploy the services in OCP
-
-    1. Go to the Knative directory:
-       ```
-       cd Knative
-       ```
-       
-    2. Update the requisite YAML files with the project namespace
+    1. Update the requisite YAML files with the project namespace
        ```
        ./searchReplaceNs.sh
+       ```
+
+    2. Go to the Knative directory:
+       ```
+       cd Knative
        ```
 
     3. Validate that yaml files have the correct images specified:
@@ -262,12 +261,12 @@ Then follow the instructions below.
        kubectl get pods | grep mongodb
        ```
 
-    4. Restore the mongo database:
+    6. Restore the mongo database:
        ```
        ./mongoRestore.sh
        ```
 
-    5. Deploy Semeru Cloud Compiler:
+    7. Deploy Semeru Cloud Compiler:
        ```
        kubectl apply -f JITServer.yaml
        ```
@@ -276,14 +275,14 @@ Then follow the instructions below.
        kubectl get pods | grep jitserver
        ```
 
-    6. Deploy the default AcmeAir instance:
+    8. Deploy the default AcmeAir instance:
       
        ```
        kubectl apply -f AcmeAirKN_default.yaml
        ```
        A message should appear in the console saying that the service was created.
 
-    7. Deploy the AcmeAir instance with Semeru Cloud Compiler:
+    9. Deploy the AcmeAir instance with Semeru Cloud Compiler:
 
        ```
        kubectl apply -f AcmeAirKN_SCC.yaml
@@ -336,7 +335,7 @@ Then follow the instructions below.
           kubectl apply -f AcmeAirKN_SCC_InstantON.yaml
           ```
 
-    8. Verify that 4 pods are running:
+    10. Verify that 4 pods are running:
        ```
        kubectl get pods
        ```
