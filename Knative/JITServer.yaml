@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: jitserver
-        image: image-registry.openshift-image-registry.svc:5000/sccproject-[Your initial]/liberty-acmeair-ee8:23.0.0.6-instanton
+        image: image-registry.openshift-image-registry.svc:5000/sccproject-[Your_initial]/liberty-acmeair-ee8:23.0.0.6-instanton
         imagePullPolicy: IfNotPresent
         # Instruct the OpenJ9 JVM to start in server mode
         args: ["jitserver"]

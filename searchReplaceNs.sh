@@ -1,9 +1,10 @@
 #!/bin/bash
 
-old_namespace="sccproject-[Your initial]"
+old_namespace="sccproject-[Your_initial]"
 new_namespace=$CURRENT_NS
 
-selected_files=$(find ./Knative -type f -name "*.yaml")
+selected_files=(./Knative/*.yaml)
+
 changes=0
 
 for file in "${selected_files[@]}"; do

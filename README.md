@@ -118,16 +118,16 @@ Then follow the instructions below.
 
    Paste the command into your terminal window. You should receive a confirmation message that you are logged in.
 
-   Once logged in, create and switch to the "sccproject-[Your initial]" namespace:
+   Once logged in, create and switch to the "sccproject-[Your_initial]" namespace:
 
    > **NOTE**: If you are working on a cluster that is shared with others, please ensure that you are using a unique project name. We recommend using the format sccproject- followed by your initials. For example, sccproject-rm.
    
    ```
-   oc new-project sccproject-[Your initial]
+   oc new-project sccproject-[Your_initial]
 
-   oc project sccproject-[Your initial]
+   oc project sccproject-[Your_initial]
 
-   export CURRENT_NS=sccproject-[Your initial]
+   export CURRENT_NS=sccproject-[Your_initial]
    ```
 
    After that, log in to the OCP registry:
@@ -240,7 +240,7 @@ Then follow the instructions below.
        ```
        grep "image:" *.yaml
        ```
-       The image should start with `image-registry.openshift-image-registry.svc:5000/` followed by the name of the project where the images were pushed (`sccproject-[Your initial]`) and followed by the image name and tag.
+       The image should start with `image-registry.openshift-image-registry.svc:5000/` followed by the name of the project where the images were pushed (`sccproject-[Your_initial]`) and followed by the image name and tag.
 
     4. Configure mongodb storage by defining a PersistentVolumeClaim with a specific storageClassName
       
@@ -329,7 +329,7 @@ Then follow the instructions below.
 
        5. Deploy the AcmeAir instance with Semeru Cloud Compiler and InstantON:
             
-          **IMPORTANT**: Please ensure to fill in all [Your initial] fields with the namespace used in the creation step above before proceeding to apply the YAML file.
+          **IMPORTANT**: Please ensure to fill in all [Your_initial] fields with the namespace used in the creation step above before proceeding to apply the YAML file.
 
           ```
           kubectl apply -f AcmeAirKN_SCC_InstantON.yaml
@@ -355,12 +355,12 @@ Then follow the instructions below.
 
     2. Verify that the `runJMeter.sh` script contains these service addresses for the JHOST environment variable passed to the JMeter containers:
 
-       **IMPORTANT**: Please ensure to fill in all fields marked as [Your initial] with the namespace used in the creation step above, and fill in all fields marked as [OCP server name] with the OCP server address you created with TechZone (see the example in the comments mentioned in the runJMeter.sh file) before proceeding to run the runJMeter.sh file.
+       **IMPORTANT**: Please ensure to fill in all fields marked as [Your_initial] with the namespace used in the creation step above, and fill in all fields marked as [OCP server name] with the OCP server address you created with TechZone (see the example in the comments mentioned in the runJMeter.sh file) before proceeding to run the runJMeter.sh file.
 
        ```
        cat runJMeter.sh | grep JHOST
        ```
-       **Note**: if you selected to start the `AcmeAirKN_SCC_InstantON` service instead of `AcmeAirKN_SCC`, then edit `runJMeter.sh` to comment out the second container invocation (the one with JHOST="acmeair-scc-sccproject-[Your initial].apps.[OCP server name].cloud.techzone.ibm.com") and remove the comment from the third container invocation (the one with JHOST="acmeair-sccio-sccproject-[Your initial].apps.[OCP server name].cloud.techzone.ibm.com").
+       **Note**: if you selected to start the `AcmeAirKN_SCC_InstantON` service instead of `AcmeAirKN_SCC`, then edit `runJMeter.sh` to comment out the second container invocation (the one with JHOST="acmeair-scc-sccproject-[Your_initial].apps.[OCP server name].cloud.techzone.ibm.com") and remove the comment from the third container invocation (the one with JHOST="acmeair-sccio-sccproject-[Your_initial].apps.[OCP server name].cloud.techzone.ibm.com").
 
     3. Launch jmeter containers:
        ```
