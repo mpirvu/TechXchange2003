@@ -228,7 +228,7 @@ Then follow the instructions below.
 10. Deploy the services in OCP
     1. Update the requisite YAML files with the project namespace
        ```
-       ./searchReplaceNs.sh
+       ./searchReplaceNs.sh "sccproject-[Your_initial]"
        ```
 
     2. Go to the Knative directory:
