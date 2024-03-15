@@ -42,7 +42,7 @@ cd TechXchange2023
 
 Then follow the instructions below.
 
-1. Find the IP of the current machine with `ifconfig`. It should be something like "10.xxx.xxx.xxx".
+1. Find the IP of the current machine with `ifconfig`. It should be something like `10.xxx.xxx.xxx` or `192.xxx.xxx.x`.
    Then use the `./searchReplaceIPAddress.sh` script to change all "9.46.81.11" addresses from bash scripts to the IP of the current machine.
    Use the following command to do this (after replacing xxx.xxx.xxx.xxx with the IP of the current machine)
    ```
@@ -126,6 +126,8 @@ Then follow the instructions below.
    oc new-project sccproject-[Your initial]
 
    oc project sccproject-[Your initial]
+
+   export $CURRENT_NS=sccproject-[Your initial]
    ```
 
    After that, log in to the OCP registry:
@@ -229,16 +231,28 @@ Then follow the instructions below.
        ```
        cd Knative
        ```
+       
+    2. Update the requisite YAML files with the project namespace
+       ```
+       ./searchReplaceNs.sh
+       ```
 
-    2. Validate that yaml files have the correct images specified:
+    3. Validate that yaml files have the correct images specified:
        ```
        grep "image:" *.yaml
        ```
-       The image should start with `image-registry.openshift-image-registry.svc:5000/` followed by the name of the project where the images were pushed (`default`) and followed by the image name and tag.
+       The image should start with `image-registry.openshift-image-registry.svc:5000/` followed by the name of the project where the images were pushed (`sccproject-[Your initial]`) and followed by the image name and tag.
 
-    3. Deploy mongodb:
+    4. Configure mongodb storage by defining a PersistentVolumeClaim with a specific storageClassName
+      
+       Run the following command to query default storageclass 
+       ```
+       oc get storageclass
+       ```
 
-      > **NOTE**: If you are working on a cluster that is shared with others, please ensure that you are using a unique project name. We recommend using the format sccproject- followed by your initials. For example, sccproject-rm.
+       Select the default storageClassName, such as `ocs-storagecluster-xxxxxx (default)`. Use the storageClassName value (ocs-storagecluster-xxxxxx) replace `[Input default storageclass]` in the Mongo.yaml file.
+
+    5. Deploy mongodb:
 
        ```
        kubectl apply -f Mongo.yaml
@@ -263,17 +277,13 @@ Then follow the instructions below.
        ```
 
     6. Deploy the default AcmeAir instance:
-
-      **IMPORTANT**: Please ensure to fill in all [Your initial] fields with the namespace used in the creation step above before proceeding to apply the YAML file.
-
+      
        ```
        kubectl apply -f AcmeAirKN_default.yaml
        ```
        A message should appear in the console saying that the service was created.
 
     7. Deploy the AcmeAir instance with Semeru Cloud Compiler:
-
-      **IMPORTANT**: Please ensure to fill in all [Your initial] fields with the namespace used in the creation step above before proceeding to apply the YAML file.
 
        ```
        kubectl apply -f AcmeAirKN_SCC.yaml
@@ -338,7 +348,7 @@ Then follow the instructions below.
        kubectl get all | grep http
        ```
        and extract the part that comes after "http://" or "https://" and use it as the address of the service.
-       It should be something like `acmeair-baseline-default.apps.ocp.ibm.edu` and `acmeair-scc-default.apps.ocp.ibm.edu` (or `acmeair-sccio-default.apps.ocp.ibm.edu` for the service with InstantON)
+       It should be something like `acmeair-baseline-default.apps.[OCP server name].cloud.techzone.ibm.com` and `acmeair-scc-default.apps.[OCP server name].cloud.techzone.ibm.com` (or `acmeair-sccio-default.apps.[OCP server name].cloud.techzone.ibm.com` for the service with InstantON)
        The same information can be obtained with `kn` if installed:
        ```
        kn service list
@@ -351,7 +361,7 @@ Then follow the instructions below.
        ```
        cat runJMeter.sh | grep JHOST
        ```
-       **Note**: if you selected to start the `AcmeAirKN_SCC_InstantON` service instead of `AcmeAirKN_SCC`, then edit `runJMeter.sh` to comment out the second container invocation (the one with JHOST="acmeair-scc-default.apps.ocp.ibm.edu") and remove the comment from the third container invocation (the one with JHOST="acmeair-sccio-default.apps.ocp.ibm.edu").
+       **Note**: if you selected to start the `AcmeAirKN_SCC_InstantON` service instead of `AcmeAirKN_SCC`, then edit `runJMeter.sh` to comment out the second container invocation (the one with JHOST="acmeair-scc-sccproject-[Your initial].apps.[OCP server name].cloud.techzone.ibm.com") and remove the comment from the third container invocation (the one with JHOST="acmeair-sccio-sccproject-[Your initial].apps.[OCP server name].cloud.techzone.ibm.com").
 
     3. Launch jmeter containers:
        ```
