@@ -3,7 +3,7 @@
 default_namespace="sccproject-[Your_initial]"
 
 if [ "$#" -eq 0 ]; then
-    old_namespace="$DEFAULT_NAMESPACE"
+    old_namespace=$default_namespace
 elif [ "$#" -eq 1 ]; then
     old_namespace=$1
 else
