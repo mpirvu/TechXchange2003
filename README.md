@@ -123,11 +123,13 @@ Then follow the instructions below.
    > **NOTE**: If you are working on a cluster that is shared with others, please ensure that you are using a unique project name. We recommend using the format sccproject- followed by your initials. For example, sccproject-rm.
    
    ```
-   oc new-project sccproject-[Your_initial]
-
-   oc project sccproject-[Your_initial]
-
    export CURRENT_NS=sccproject-[Your_initial]
+   ```
+   
+   ```
+   oc new-project $CURRENT_NS
+
+   oc project $CURRENT_NS
    ```
 
    After that, log in to the OCP registry:
@@ -226,9 +228,10 @@ Then follow the instructions below.
 
 
 10. Deploy the services in OCP
-    1. Update the requisite YAML files with the project namespace
+    1. Update the requisite YAML files with the project namespace you set earlier (CURRENT_NS)
+       
        ```
-       ./searchReplaceNs.sh "sccproject-[Your_initial]"
+       ./searchReplaceNs.sh
        ```
 
     2. Go to the Knative directory:

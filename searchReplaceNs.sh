@@ -1,11 +1,16 @@
 #!/bin/bash
 
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 <old_namespace>"
+default_namespace="sccproject-[Your_initial]"
+
+if [ "$#" -eq 0 ]; then
+    old_namespace="$DEFAULT_NAMESPACE"
+elif [ "$#" -eq 1 ]; then
+    old_namespace=$1
+else
+    echo "Usage: $0 [<old_namespace>]"
     exit 1
 fi
 
-old_namespace=$1
 new_namespace=$CURRENT_NS
 selected_files=(./Knative/*.yaml)
 changes=0
