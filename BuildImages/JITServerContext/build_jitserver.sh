@@ -1,1 +1,1 @@
-docker build -f Dockerfile -t jitserver:J17 .
+podman build -f Dockerfile -t jitserver:J17 .
