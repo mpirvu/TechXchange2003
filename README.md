@@ -332,17 +332,18 @@ Then follow the instructions below.
 
        5. Deploy the AcmeAir instance with Semeru Cloud Compiler and InstantON:
             
-          **IMPORTANT**: Please ensure to fill in all [Your_initial] fields with the namespace used in the creation step above before proceeding to apply the YAML file.
+          **IMPORTANT**: Please ensure to fill in all `[Your_initial]` fields with the namespace used in the creation step above before proceeding to apply the YAML file.
 
           ```
           kubectl apply -f AcmeAirKN_SCC_InstantON.yaml
           ```
 
     10. Verify that 4 pods are running:
-       ```
-       kubectl get pods
-       ```
-       Note: Knative will terminate the AcmeAir pods automatically after about two minutes of inactivity. This does not affect the experiment.
+
+        ```
+        kubectl get pods
+        ```
+        Note: Knative will terminate the AcmeAir pods automatically after about two minutes of inactivity. This does not affect the experiment.
 
 11. Apply external load
     1. Find the external address of the two AcmeAir services. Use
@@ -358,7 +359,7 @@ Then follow the instructions below.
 
     2. Verify that the `runJMeter.sh` script contains these service addresses for the JHOST environment variable passed to the JMeter containers:
 
-       **IMPORTANT**: Please ensure to fill in all fields marked as [Your_initial] with the namespace used in the creation steps above, and fill in all fields marked as [OCP server name] with the OCP server address you created with TechZone (see the example in the comments mentioned in the "Find the external address of the two AcmeAir services" step) before proceeding to run the runJMeter.sh file.
+       **IMPORTANT**: Please ensure to fill in all fields marked as `[Your_initial]` with the namespace used in the creation steps above, and fill in all fields marked as `[OCP server name]` with the OCP server address you created with TechZone (see the example in the comments mentioned in the "Find the external address of the two AcmeAir services" step) before proceeding to run the runJMeter.sh file.
 
        ```
        cat runJMeter.sh | grep JHOST
