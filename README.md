@@ -260,6 +260,25 @@ Then follow the instructions below.
        ```
        A message should appear in the console saying that the service was created.
 
+       > **IMPORTANT**: If the command returns an error related to 'knative-serving' not being found, please use the following step to verify the OpenShift serverless operator is installed and ready
+     
+       > ```bash
+       > oc get csv
+       > ```
+
+       > You should see the following output:
+       > ![ocp-serverless](DocImages/ocp-serverless.png)
+
+       > If not, please run the following command to install the OpenShift Serverless operator and start the Knative service on the server
+
+       >>  ```bash
+       >>  oc apply -f serverless-subscription.yaml
+       >>  ```
+       >>  ```bash
+       >>  oc apply -f serving.yaml
+       >>  ```
+
+
     8. Deploy the AcmeAir instance with Semeru Cloud Compiler:
        ```
        kubectl apply -f AcmeAirKN_SCC.yaml
