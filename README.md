@@ -198,7 +198,7 @@ Then follow the instructions below.
 
    Note: There are two pre-configured datasources called InfluxDB and InfluxDB2. However, the IP address of these datasources needs to be adjusted.
 
-   To configure the datasources, select the gear from the left side menu, then select "Data sources", then select the data source you want to configure (InfluxDB or InfluxDB2).
+   To configure the datasources, select the gear(Configuration) from the left side menu, then select "Data sources", then select the data source you want to configure (InfluxDB or InfluxDB2).
    For the "URL" field of the data source, change the existing IP (9.46.81.11) to the IP machine that runs InfluxDB (this was determined in Step 1 using `ifconfig`).
 
    ![grafana-source](DocImages/GrafanaSource.png)
