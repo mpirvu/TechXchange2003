@@ -358,7 +358,7 @@ Then follow the instructions below.
 
     2. Verify that the `runJMeter.sh` script contains these service addresses for the JHOST environment variable passed to the JMeter containers:
 
-       **IMPORTANT**: Please ensure to fill in all fields marked as [Your_initial] with the namespace used in the creation step above, and fill in all fields marked as [OCP server name] with the OCP server address you created with TechZone (see the example in the comments mentioned in the runJMeter.sh file) before proceeding to run the runJMeter.sh file.
+       **IMPORTANT**: Please ensure to fill in all fields marked as [Your_initial] with the namespace used in the creation steps above, and fill in all fields marked as [OCP server name] with the OCP server address you created with TechZone (see the example in the comments mentioned in the "Find the external address of the two AcmeAir services" step) before proceeding to run the runJMeter.sh file.
 
        ```
        cat runJMeter.sh | grep JHOST
