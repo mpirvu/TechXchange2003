@@ -272,11 +272,16 @@ Then follow the instructions below.
        > If not, please run the following command to install the OpenShift Serverless operator and start the Knative service on the server
 
        >>  ```bash
+       >>  cd ..
+       >>  ```
+       >>  ```bash
        >>  oc apply -f serverless-subscription.yaml
        >>  ```
        >>  ```bash
        >>  oc apply -f serving.yaml
        >>  ```
+
+       >> Then navigate back to the Knative directory using `cd Knative`
 
 
     8. Deploy the AcmeAir instance with Semeru Cloud Compiler:
