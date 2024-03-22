@@ -350,8 +350,14 @@ Then follow the instructions below.
        ```
        kubectl get all | grep http
        ```
-       and extract the part that comes after "http://" or "https://" and use it as the address of the service.
-       It should be something like `acmeair-baseline-default.apps.[OCP server name].cloud.techzone.ibm.com` and `acmeair-scc-default.apps.[OCP server name].cloud.techzone.ibm.com` (or `acmeair-sccio-default.apps.[OCP server name].cloud.techzone.ibm.com` for the service with InstantON)
+
+       Use `replaceServerAddress.sh` to identify and replace the `[OCP server name]` in the `runJMeter.sh`
+       ```
+       ./replaceServerAddress.sh
+       ```
+       > or manually extract the part that comes after "http://" or "https://" and use it as the address of the service.
+       It should be something like `acmeair-baseline-default.apps.[OCP server name].cloud.techzone.ibm.com` and `acmeair-scc-default.apps.[OCP server name].cloud.techzone.ibm.com` (or `acmeair-sccio-default.apps.[OCP server name].cloud.techzone.ibm.com` for the service with InstantON), and replace the example service address in the `runJMeter.sh`.
+
        The same information can be obtained with `kn` if installed:
        ```
        kn service list
