@@ -12,7 +12,7 @@ else
 fi
 
 new_namespace=$CURRENT_NS
-selected_files=(./Knative/*.yaml)
+selected_files=(./Knative/*.yaml ./Knative/*.sh)
 changes=0
 
 if [[ -z "${new_namespace}" ]]; then
