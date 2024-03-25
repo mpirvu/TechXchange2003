@@ -16,7 +16,7 @@ Throughput values are sent by the JMeter instances to an influxdb database and f
 The two AcmeAir deployments together with the Semeru Cloud Compiler service and mongodb service are deployed in OpenShift and use Knative to scale up and down based on the load.
 The rest of the pods (for JMeter, influxdb and grafana) run outside of OpenShift on a separate machine.
 
-
+As part of this lab, the Knative service needs to installed and configured. This will typically be performed by the instructor before the lab and be available for all to use. If you are the instructor, or if you would like to see the steps involved, please refer to the [Knative setup instruction](https://github.com/rhagarty/techxchange-knative-setup).
 
 Login as root using the password provided in the Lab Guide:
 ```
@@ -118,7 +118,7 @@ Then follow the instructions below.
 
    Paste the command into your terminal window. You should receive a confirmation message that you are logged in.
 
-   Once logged in, create and switch to the "sccproject-[Your_initial]" namespace:
+   Once logged in, create and switch to the `sccproject-[Your_initial]` namespace:
 
    > **NOTE**: If you are working on a cluster that is shared with others, please ensure that you are using a unique project name. We recommend using the format sccproject- followed by your initials. For example, sccproject-rm.
    
@@ -292,32 +292,19 @@ Then follow the instructions below.
        ```
        Note: if you want to deploy the AcmeAir instance with Semeru Cloud Compiler and InstantON instead, then follow these steps:
 
-       1. Edit the KNative permissions to allow to add Capabilities (if not already done)
+       1. ### Verify the Knative containerspec-addcapabilities feature is enabled
 
-          To confirm whether the `containerspec-addcapabilities` is enabled, you can inspect the current configuration of `config-features` by executing the command 
-
+            To confirm whether the `containerspec-addcapabilities` is enabled, you can inspect the current configuration of `config-features` by executing the command 
             > ```bash 
             > kubectl -n knative-serving get cm config-features -oyaml | grep -c "kubernetes.containerspec-addcapabilities: enabled" && echo "true" || echo "false"
             > ```
 
-            > **IMPORTANT**: If the command returns true, it indicates that the Knative 'containerspec-addcapabilities' feature is already enabled. Please skip the step regarding editing Knative permissions. However, if it returns false, please proceed with the subsequent step to enable the feature.
+            > **IMPORTANT**: If the command returns true, it indicates that the Knative 'containerspec-addcapabilities' feature is already enabled. Please skip the step regarding editing Knative permissions. However, if it returns false, please contact your instructor regarding this. 
+            In a production scenario, you may be required to enable `containerspec-addcapabilities` manually, please refer to our [knative setup instruction](https://github.com/rhagarty/techxchange-knative-setup) for further info.  
 
-            >>  ### Edit the Knative permissions to allow to the ability to add Capabilities
-
-            >>  ```bash
-            >>  kubectl -n knative-serving edit cm config-features -oyaml
-            >>  ```
-
-            >>  Add in the following line just bellow the “data” tag at the top:
-            >>  ```yaml
-            >>  kubernetes.containerspec-addcapabilities: enabled
-            >>  ```
-
-            >> **IMPORTANT**: to save your change and exit the file, hit the escape key, then type `:x`. If you received the message `Edit cancelled, no changes made`, it may indicate that the Knative service has already been edited and the same changes applied. 
-
-       2. Create a Service Account named `instanton-sa-[Your Initial]`:
+       2. Create a Service Account bound to your project namespace:
           ```
-          oc create serviceaccount instanton-sa-[Your Initial]
+          oc create serviceaccount instanton-sa-$CURRENT_NS
           ```
 
        3. Create a Security Context Constraint named `cap-cr-scc`:
@@ -327,7 +314,7 @@ Then follow the instructions below.
 
        4. Add the `instanton-sa` Service Account to the `cap-cr-scc` Security Context Constraint:
           ```
-          oc adm policy add-scc-to-user cap-cr-scc -z instanton-sa-[Your Initial]
+          oc adm policy add-scc-to-user cap-cr-scc -z instanton-sa-$CURRENT_NS
           ```
 
        5. Deploy the AcmeAir instance with Semeru Cloud Compiler and InstantON:

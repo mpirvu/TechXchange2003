@@ -18,7 +18,7 @@ spec:
         # Scale up to 2 pods
         autoscaling.knative.dev/max-scale: "2"
     spec:
-      serviceAccountName: instanton-sa
+      serviceAccountName: instanton-sa-[Your_initial]
       containers:
       - image: image-registry.openshift-image-registry.svc:5000/sccproject-[Your_initial]/liberty-acmeair-ee8:23.0.0.6-instanton
         imagePullPolicy: Always
