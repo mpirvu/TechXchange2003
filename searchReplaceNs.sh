@@ -26,8 +26,8 @@ if [[ -z "${new_namespace}" ]]; then
 fi
 
 for file in "${selected_files[@]}"; do
-    if [ "$old_namespace" == "scc[Your_initial]" ]; then
-        sed -i "s/scc-\[Your_initial\]/$new_namespace/g" "$file"
+    if [ "$old_namespace" == "scclab-[Your_initial]" ]; then
+        sed -i "s/scclab-\[Your_initial\]/$new_namespace/g" "$file"
         sed -i "s/instanton-sa-\[Your_initial\]/instanton-sa-$new_namespace/g" "$file"
     else 
         sed -i "s/$old_namespace/$new_namespace/g" "$file"
