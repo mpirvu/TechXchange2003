@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Please note if you need to replace any strings other than the default value provided here. You can use ./searchReplaceNs.sh [target string]. 
-# The script will utilize the CURRENTNS value to substitute the target string. For example, running "./searchReplaceNs.sh scc-rm" will 
-# replace the scc-rm with CURRENTNS value.
+# The script will utilize the CURRENTNS value to substitute the target string. For example, running "./searchReplaceNs.sh scclab-rm" will 
+# replace the scclab-rm with CURRENTNS value.
 
-default_namespace="scc-[Your_initial]"
+default_namespace="scclab-[Your_initial]"
 default_service_acct="instanton-sa-[Your_initial]"
 
 if [ "$#" -eq 0 ]; then

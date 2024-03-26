@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: mongo
-        image: image-registry.openshift-image-registry.svc:5000/scc-[Your_initial]/mongo-acmeair:5.0.17
+        image: image-registry.openshift-image-registry.svc:5000/scclab-[Your_initial]/mongo-acmeair:5.0.17
         volumeMounts:
           - name: mongo-pvc
             mountPath: "/data/db/"
@@ -65,7 +65,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mongo-pvc
-  namespace: scc-[Your_initial]
+  namespace: scclab-[Your_initial]
 spec:
   storageClassName: [Input default storageclass]
   accessModes:

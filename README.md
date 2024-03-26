@@ -118,12 +118,12 @@ Then follow the instructions below.
 
    Paste the command into your terminal window. You should receive a confirmation message that you are logged in.
 
-   Once logged in, create and switch to the `scc-[Your_initial]` namespace:
+   Once logged in, create and switch to the `scclab-[Your_initial]` namespace:
 
    > **NOTE**: If you are working on a cluster that is shared with others, please ensure that you are using a unique project name. We recommend using the format scc- followed by your initials. For example, scc-rm.
    
    ```
-   export CURRENT_NS=scc-[Your_initial]
+   export CURRENT_NS=scclab-[Your_initial]
    ```
    
    ```
@@ -243,7 +243,7 @@ Then follow the instructions below.
        ```
        grep "image:" *.yaml
        ```
-       The image should start with `image-registry.openshift-image-registry.svc:5000/` followed by the name of the project where the images were pushed (`scc-[Your_initial]`) and followed by the image name and tag.
+       The image should start with `image-registry.openshift-image-registry.svc:5000/` followed by the name of the project where the images were pushed (`scclab-[Your_initial]`) and followed by the image name and tag.
 
     4. Configure mongodb storage by defining a PersistentVolumeClaim with a specific storageClassName
       
@@ -357,7 +357,7 @@ Then follow the instructions below.
        ```
        cat runJMeter.sh | grep JHOST
        ```
-       **Note**: if you selected to start the `AcmeAirKN_SCC_InstantON` service instead of `AcmeAirKN_SCC`, then edit `runJMeter.sh` to comment out the second container invocation (the one with JHOST="acmeair-scc-scc-[Your_initial].apps.[OCP server name].cloud.techzone.ibm.com") and remove the comment from the third container invocation (the one with JHOST="acmeair-sccio-scc-[Your_initial].apps.[OCP server name].cloud.techzone.ibm.com").
+       **Note**: if you selected to start the `AcmeAirKN_SCC_InstantON` service instead of `AcmeAirKN_SCC`, then edit `runJMeter.sh` to comment out the second container invocation (the one with JHOST="acmeair-scc-scclab-[Your_initial].apps.[OCP server name].cloud.techzone.ibm.com") and remove the comment from the third container invocation (the one with JHOST="acmeair-sccio-scclab-[Your_initial].apps.[OCP server name].cloud.techzone.ibm.com").
 
     3. Launch jmeter containers:
        ```

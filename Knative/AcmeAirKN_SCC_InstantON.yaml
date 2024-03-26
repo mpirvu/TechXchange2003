@@ -2,7 +2,7 @@ apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: acmeair-sccio
-  namespace: scc-[Your_initial]
+  namespace: scclab-[Your_initial]
 spec:
   template:
     metadata:
@@ -20,7 +20,7 @@ spec:
     spec:
       serviceAccountName: instanton-sa-[Your_initial]
       containers:
-      - image: image-registry.openshift-image-registry.svc:5000/scc-[Your_initial]/liberty-acmeair-ee8:23.0.0.6-instanton
+      - image: image-registry.openshift-image-registry.svc:5000/scclab-[Your_initial]/liberty-acmeair-ee8:23.0.0.6-instanton
         imagePullPolicy: Always
         name: acmeair-sccio
         env:

@@ -2,7 +2,7 @@ apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: acmeair-baseline
-  namespace: scc-[Your_initial]
+  namespace: scclab-[Your_initial]
 spec:
   template:
     metadata:
@@ -19,7 +19,7 @@ spec:
         autoscaling.knative.dev/max-scale: "2"
     spec:
       containers:
-      - image: image-registry.openshift-image-registry.svc:5000/scc-[Your_initial]/liberty-acmeair-ee8:23.0.0.6
+      - image: image-registry.openshift-image-registry.svc:5000/scclab-[Your_initial]/liberty-acmeair-ee8:23.0.0.6
         imagePullPolicy: Always
         name: acmeair-baseline
         env:
