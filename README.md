@@ -120,7 +120,7 @@ Then follow the instructions below.
 
    Once logged in, create and switch to the `scclab-[Your_initial]` namespace:
 
-   > **NOTE**: If you are working on a cluster that is shared with others, please ensure that you are using a unique project name. We recommend using the format scc- followed by your initials. For example, scc-rm.
+   > **NOTE**: If you are working on a cluster that is shared with others, please ensure that you are using a unique project name. We recommend using the format scclab- followed by your initials. For example, scclab-rm.
    
    ```
    export CURRENT_NS=scclab-[Your_initial]
