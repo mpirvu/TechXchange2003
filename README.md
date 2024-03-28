@@ -224,8 +224,9 @@ Then follow the instructions below.
 9. Display the pre-loaded dashboard in grafana UI
 
    From the left side menu select the "Dashboard" icon (4 squares), then select "Browse", then select "JMeter Load Test".
-   Enable automatic refresh of the graphs by selecting `10 sec` in the top right menu of grafana dashboard.
+   Activate the automatic refresh feature for the graphs by navigating to the top-right menu of the Grafana dashboard and selecting the `10 sec` option, as illustrated in the image below.
 
+   ![grafana-dashboard-setting](DocImages/grafana-dashboard-setting.png)
 
 10. Deploy the services in OCP
     1. Update the requisite YAML files with the project namespace you set earlier (CURRENT_NS)
