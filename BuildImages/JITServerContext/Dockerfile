@@ -1,4 +1,4 @@
-FROM icr.io/appcafe/ibm-semeru-runtimes:open-21-jdk-ubi-minimal
+FROM icr.io/appcafe/ibm-semeru-runtimes:full-java21-openj9-ubi-minimal
 
 EXPOSE 38400
 # Whack any options set by the OpenJ9 container definition
