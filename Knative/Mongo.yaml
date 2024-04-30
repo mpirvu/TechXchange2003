@@ -18,7 +18,10 @@ spec:
     spec:
       containers:
       - name: mongo
-        image: image-registry.openshift-image-registry.svc:5000/default/mongo-acmeair:5.0.17
+        image: image-registry.openshift-image-registry.svc:5000/scclab-[Your_initials]/mongo-acmeair:5.0.17
+        volumeMounts:
+          - name: mongo-pvc
+            mountPath: "/data/db/"
         imagePullPolicy: IfNotPresent
         args: ["--nojournal"]
         ports:
@@ -30,6 +33,10 @@ spec:
           limits:
             memory: "500Mi"
             cpu: "2000m"
+      volumes:
+      - name: mongo-pvc
+        persistentVolumeClaim:
+          claimName: mongo-pvc
 
 ---
 apiVersion: v1
@@ -51,3 +58,18 @@ spec:
       targetPort: 27017
   sessionAffinity: ClientIP
 
+---
+# run `oc get storageclass` to query default storageclass
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-pvc
+  namespace: scclab-[Your_initials]
+spec:
+  storageClassName: [Input default storageclass]
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 3Gi

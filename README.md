@@ -16,7 +16,7 @@ Throughput values are sent by the JMeter instances to an influxdb database and f
 The two AcmeAir deployments together with the Semeru Cloud Compiler service and mongodb service are deployed in OpenShift and use Knative to scale up and down based on the load.
 The rest of the pods (for JMeter, influxdb and grafana) run outside of OpenShift on a separate machine.
 
-
+As part of this lab, the Knative service needs to installed and configured. This will typically be performed by the instructor before the lab and be available for all to use. If you are the instructor, or if you would like to see the steps involved, please refer to the [Knative setup instruction](https://github.com/rhagarty/techxchange-knative-setup).
 
 Login as root using the password provided in the Lab Guide:
 ```
@@ -25,7 +25,7 @@ su --login root
 
 Clone the repository
 ```
-cd /home/ibmuser/Lab-SCC
+cd /home/techzone/Lab-SCC
 ```
 ```
 git clone https://github.com/mpirvu/TechXchange2023.git
@@ -34,9 +34,15 @@ git clone https://github.com/mpirvu/TechXchange2023.git
 cd TechXchange2023
 ```
 
+> **NOTE**: If you prefer to use an IDE to view the project, you can run VSCode with admin privileges using the following command: 
+> ```bash
+> sudo code --no-sandbox --user-data-dir /home/techzone
+> ```
+
+
 Then follow the instructions below.
 
-1. Find the IP of the current machine with `ifconfig`. It should be something like "10.xxx.xxx.xxx".
+1. Find the IP of the current machine with `ifconfig`. It should be something like `10.xxx.xxx.xxx` or `192.xxx.xxx.x`.
    Then use the `./searchReplaceIPAddress.sh` script to change all "9.46.81.11" addresses from bash scripts to the IP of the current machine.
    Use the following command to do this (after replacing xxx.xxx.xxx.xxx with the IP of the current machine)
    ```
@@ -100,13 +106,7 @@ Then follow the instructions below.
 
 6. Push the images for AcmeAir and mongodb to the OCP private repository
 
-   Login to the OCP console, using the following URL:
-
-   ```bash
-   https://console-openshift-console.apps.ocp.ibm.edu
-   ```
-
-   Use username: `ocadmin` and the corresponding password provided in the Lab Guide.
+   **IMPORTANT**: Login to the OCP console, using the desktop URL provided in the TechZone OCP server reservation.
 
    From the OCP console UI, click the username in the top right corner, and select `Copy login command`.
 
@@ -118,7 +118,21 @@ Then follow the instructions below.
 
    Paste the command into your terminal window. You should receive a confirmation message that you are logged in.
 
-   Once logged in, log in to the OCP registry:
+   Once logged in, create and switch to the `scclab-[Your_initials]` namespace:
+
+   > **NOTE**: If you are working on a cluster that is shared with others, please ensure that you are using a unique project name. We recommend using the format scclab- followed by your initials. For example, scclab-rm.
+   
+   ```
+   export CURRENT_NS=scclab-[Your_initials]
+   ```
+   
+   ```
+   oc new-project $CURRENT_NS
+
+   oc project $CURRENT_NS
+   ```
+
+   After that, log in to the OCP registry:
    ```
    oc registry login --insecure=true
    ```
@@ -157,24 +171,35 @@ Then follow the instructions below.
 
    Now tag and push the images for AcmeAir and mongodb to the OCP private repository.
 
-   ```
-   podman tag localhost/mongo-acmeair:5.0.17 $(oc registry info)/$(oc project -q)/mongo-acmeair:5.0.17
-   ```
-   ```
-   podman push $(oc registry info)/$(oc project -q)/mongo-acmeair:5.0.17 --tls-verify=false
-   ```
-   ```
-   podman tag localhost/liberty-acmeair-ee8:23.0.0.6 $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6
-   ```
-   ```
-   podman push $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6 --tls-verify=false
-   ```
-   ```
-   podman tag localhost/liberty-acmeair-ee8:23.0.0.6-instanton $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6-instanton
-   ```
-   ```
-   podman push $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6-instanton --tls-verify=false
-   ```
+   - mongo-acmeair image
+
+   > ```bash
+   > podman tag localhost/mongo-acmeair:5.0.17 $(oc registry info)/$(oc project -q)/mongo-acmeair:5.0.17
+   > 
+   > podman push $(oc registry info)/$(oc project -q)/mongo-acmeair:5.0.17 --tls-verify=false
+   > ```
+
+   - liberty-acmeair-ee8 image
+
+   > ```bash
+   > podman tag localhost/liberty-acmeair-ee8:24.0.0.4 $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:24.0.0.4
+   > 
+   > podman push $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:24.0.0.4 --tls-verify=false
+   > ```
+
+   - liberty-acmeair-ee8 instantOn image
+
+   > ```bash
+   > podman tag localhost/liberty-acmeair-ee8:24.0.0.4-instanton $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:24.0.0.4-instanton
+   > 
+   > podman push $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:24.0.0.4-instanton --tls-verify=false
+   > ```
+
+   - Verify the images have been pushed to the OpenShift image repository
+
+   > ```bash
+   > oc get imagestream
+   > ```
 
 7. Start the grafana container:
    ```
@@ -187,7 +212,7 @@ Then follow the instructions below.
 
    Note: There are two pre-configured datasources called InfluxDB and InfluxDB2. However, the IP address of these datasources needs to be adjusted.
 
-   To configure the datasources, select the gear from the left side menu, then select "Data sources", then select the data source you want to configure (InfluxDB or InfluxDB2).
+   To configure the datasources, select the gear (Configuration) from the left side menu, then select "Data sources", then select the data source you want to configure (InfluxDB or InfluxDB2).
    For the "URL" field of the data source, change the existing IP (9.46.81.11) to the IP machine that runs InfluxDB (this was determined in Step 1 using `ifconfig`).
 
    ![grafana-source](DocImages/GrafanaSource.png)
@@ -199,14 +224,15 @@ Then follow the instructions below.
 9. Display the pre-loaded dashboard in grafana UI
 
    From the left side menu select the "Dashboard" icon (4 squares), then select "Browse", then select "JMeter Load Test".
-   Enable automatic refresh of the graphs by selecting `10 sec` in the top right menu of grafana dashboard.
+   Activate the automatic refresh feature for the graphs by navigating to the top-right menu of the Grafana dashboard and selecting the `10 sec` option, as illustrated in the image below.
 
+   ![grafana-dashboard-setting](DocImages/grafana-dashboard-setting.png)
 
 10. Deploy the services in OCP
-
-    1. Switch to the "default" namespace:
+    1. Update the requisite YAML files with the project namespace you set earlier (CURRENT_NS)
+       
        ```
-       oc project default
+       ./searchReplaceNs.sh
        ```
 
     2. Go to the Knative directory:
@@ -218,9 +244,19 @@ Then follow the instructions below.
        ```
        grep "image:" *.yaml
        ```
-       The image should start with `image-registry.openshift-image-registry.svc:5000/` followed by the name of the project where the images were pushed (`default`) and followed by the image name and tag.
+       The image should start with `image-registry.openshift-image-registry.svc:5000/` followed by the name of the project where the images were pushed (`scclab-[Your_initials]`) and followed by the image name and tag.
 
-    4. Deploy mongodb:
+    4. Configure mongodb storage by defining a PersistentVolumeClaim with a specific storageClassName
+      
+       Run the following command to query default storageclass 
+       ```
+       oc get storageclass
+       ```
+
+       Select the default storageClassName, such as `ocs-storagecluster-xxxxxx (default)`. Use the storageClassName value (ocs-storagecluster-xxxxxx) replace `[Input default storageclass]` in the Mongo.yaml file.
+
+    5. Deploy mongodb:
+
        ```
        kubectl apply -f Mongo.yaml
        ```
@@ -229,12 +265,12 @@ Then follow the instructions below.
        kubectl get pods | grep mongodb
        ```
 
-    5. Restore the mongo database:
+    6. Restore the mongo database:
        ```
        ./mongoRestore.sh
        ```
 
-    6. Deploy Semeru Cloud Compiler:
+    7. Deploy Semeru Cloud Compiler:
        ```
        kubectl apply -f JITServer.yaml
        ```
@@ -243,37 +279,33 @@ Then follow the instructions below.
        kubectl get pods | grep jitserver
        ```
 
-    7. Deploy the default AcmeAir instance:
+    8. Deploy the default AcmeAir instance:
+      
        ```
        kubectl apply -f AcmeAirKN_default.yaml
        ```
        A message should appear in the console saying that the service was created.
 
-    8. Deploy the AcmeAir instance with Semeru Cloud Compiler:
+    9. Deploy the AcmeAir instance with Semeru Cloud Compiler:
+
        ```
        kubectl apply -f AcmeAirKN_SCC.yaml
        ```
        Note: if you want to deploy the AcmeAir instance with Semeru Cloud Compiler and InstantON instead, then follow these steps:
 
-       1. Edit the KNative permissions to allow to add Capabilities (if not already done)
-          ```
-          kubectl -n knative-serving edit cm config-features -oyaml
-          ```
-          and add the following line under `data:`
-          ```
-            kubernetes.containerspec-addcapabilities: enabled
-          ```
-          The result should look like this:
-          ```
-          data:
-            kubernetes.containerspec-addcapabilities: enabled
-            _example: |-
-          ```
-          Save the file and exit the editor.
+       1. ### Verify the Knative containerspec-addcapabilities feature is enabled
 
-       2. Create a Service Account named `instanton-sa`:
+            To confirm whether the `containerspec-addcapabilities` is enabled, you can inspect the current configuration of `config-features` by executing the command 
+            > ```bash 
+            > kubectl -n knative-serving get cm config-features -oyaml | grep -c "kubernetes.containerspec-addcapabilities: enabled" && echo "true" || echo "false"
+            > ```
+
+            > **IMPORTANT**: If the command returns true, it indicates that the Knative 'containerspec-addcapabilities' feature is already enabled. Please skip the step regarding editing Knative permissions. However, if it returns false, please contact your instructor regarding this. 
+            In a production scenario, you may be required to enable `containerspec-addcapabilities` manually, please refer to our [knative setup instruction](https://github.com/rhagarty/techxchange-knative-setup) for further info.  
+
+       2. Create a Service Account bound to your project namespace:
           ```
-          oc create serviceaccount instanton-sa
+          oc create serviceaccount instanton-sa-$CURRENT_NS
           ```
 
        3. Create a Security Context Constraint named `cap-cr-scc`:
@@ -283,37 +315,50 @@ Then follow the instructions below.
 
        4. Add the `instanton-sa` Service Account to the `cap-cr-scc` Security Context Constraint:
           ```
-          oc adm policy add-scc-to-user cap-cr-scc -z instanton-sa
+          oc adm policy add-scc-to-user cap-cr-scc -z instanton-sa-$CURRENT_NS
           ```
 
        5. Deploy the AcmeAir instance with Semeru Cloud Compiler and InstantON:
+            
+          **IMPORTANT**: Please ensure to fill in all `[Your_initials]` fields with the namespace used in the creation step above before proceeding to apply the YAML file.
+
           ```
           kubectl apply -f AcmeAirKN_SCC_InstantON.yaml
           ```
 
-    9. Verify that 4 pods are running:
-       ```
-       kubectl get pods
-       ```
-       Note: Knative will terminate the AcmeAir pods automatically after about two minutes of inactivity. This does not affect the experiment.
+    10. Verify that 4 pods are running:
+
+        ```
+        kubectl get pods
+        ```
+        Note: Knative will terminate the AcmeAir pods automatically after about two minutes of inactivity. This does not affect the experiment.
 
 11. Apply external load
     1. Find the external address of the two AcmeAir services. Use
        ```
        kubectl get all | grep http
        ```
-       and extract the part that comes after "http://" or "https://" and use it as the address of the service.
-       It should be something like `acmeair-baseline-default.apps.ocp.ibm.edu` and `acmeair-scc-default.apps.ocp.ibm.edu` (or `acmeair-sccio-default.apps.ocp.ibm.edu` for the service with InstantON)
+
+       Run the `replaceServerAddress.sh` script to automatically identify and replace the `[OCP server name]` in the `runJMeter.sh` script:
+       ```
+       ./replaceServerAddress.sh
+       ```
+       > Alternatively, you can manually extract the part following `http://` or `https://` from the output of the command `kubectl get all | grep http`, and then use it as the address for the service in the `JHOST` variable.
+       It should be something like `acmeair-baseline-default.apps.[OCP server name].cloud.techzone.ibm.com` and `acmeair-scc-default.apps.[OCP server name].cloud.techzone.ibm.com` (or `acmeair-sccio-default.apps.[OCP server name].cloud.techzone.ibm.com` for the service with InstantON), and replace the example service address in the `runJMeter.sh`.
+
        The same information can be obtained with `kn` if installed:
        ```
        kn service list
        ```
 
     2. Verify that the `runJMeter.sh` script contains these service addresses for the JHOST environment variable passed to the JMeter containers:
+
+       **IMPORTANT**: Please ensure to fill in all fields marked as `[Your_initials]` with the namespace used in the creation steps above, and fill in all fields marked as `[OCP server name]` with the OCP server address you created with TechZone (see the example in the comments mentioned in the "Find the external address of the two AcmeAir services" step) before proceeding to run the runJMeter.sh file.
+
        ```
        cat runJMeter.sh | grep JHOST
        ```
-       Note: if you selected to start the `AcmeAirKN_SCC_InstantON` service instead of `AcmeAirKN_SCC`, then edit `runJMeter.sh` to comment out the second container invocation (the one with JHOST="acmeair-scc-default.apps.ocp.ibm.edu") and remove the comment from the third container invocation (the one with JHOST="acmeair-sccio-default.apps.ocp.ibm.edu").
+       **Note**: if you selected to start the `AcmeAirKN_SCC_InstantON` service instead of `AcmeAirKN_SCC`, then edit `runJMeter.sh` to comment out the second container invocation (the one with JHOST="acmeair-scc-scclab-[Your_initials].apps.[OCP server name].cloud.techzone.ibm.com") and remove the comment from the third container invocation (the one with JHOST="acmeair-sccio-scclab-[Your_initials].apps.[OCP server name].cloud.techzone.ibm.com").
 
     3. Launch jmeter containers:
        ```

@@ -2,7 +2,7 @@ apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: acmeair-sccio
-  namespace: default
+  namespace: scclab-[Your_initials]
 spec:
   template:
     metadata:
@@ -18,9 +18,9 @@ spec:
         # Scale up to 2 pods
         autoscaling.knative.dev/max-scale: "2"
     spec:
-      serviceAccountName: instanton-sa
+      serviceAccountName: instanton-sa-[Your_initials]
       containers:
-      - image: image-registry.openshift-image-registry.svc:5000/default/liberty-acmeair-ee8:23.0.0.6-instanton
+      - image: image-registry.openshift-image-registry.svc:5000/scclab-[Your_initials]/liberty-acmeair-ee8:24.0.0.4-instanton
         imagePullPolicy: Always
         name: acmeair-sccio
         env:
