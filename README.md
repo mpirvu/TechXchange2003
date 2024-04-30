@@ -118,12 +118,12 @@ Then follow the instructions below.
 
    Paste the command into your terminal window. You should receive a confirmation message that you are logged in.
 
-   Once logged in, create and switch to the `scclab-[Your_initial]` namespace:
+   Once logged in, create and switch to the `scclab-[Your_initials]` namespace:
 
    > **NOTE**: If you are working on a cluster that is shared with others, please ensure that you are using a unique project name. We recommend using the format scclab- followed by your initials. For example, scclab-rm.
    
    ```
-   export CURRENT_NS=scclab-[Your_initial]
+   export CURRENT_NS=scclab-[Your_initials]
    ```
    
    ```
@@ -182,17 +182,17 @@ Then follow the instructions below.
    - liberty-acmeair-ee8 image
 
    > ```bash
-   > podman tag localhost/liberty-acmeair-ee8:23.0.0.6 $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6
+   > podman tag localhost/liberty-acmeair-ee8:24.0.0.4 $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:24.0.0.4
    > 
-   > podman push $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6 --tls-verify=false
+   > podman push $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:24.0.0.4 --tls-verify=false
    > ```
 
    - liberty-acmeair-ee8 instantOn image
 
    > ```bash
-   > podman tag localhost/liberty-acmeair-ee8:23.0.0.6-instanton $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6-instanton
+   > podman tag localhost/liberty-acmeair-ee8:24.0.0.4-instanton $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:24.0.0.4-instanton
    > 
-   > podman push $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:23.0.0.6-instanton --tls-verify=false
+   > podman push $(oc registry info)/$(oc project -q)/liberty-acmeair-ee8:24.0.0.4-instanton --tls-verify=false
    > ```
 
    - Verify the images have been pushed to the OpenShift image repository
@@ -244,7 +244,7 @@ Then follow the instructions below.
        ```
        grep "image:" *.yaml
        ```
-       The image should start with `image-registry.openshift-image-registry.svc:5000/` followed by the name of the project where the images were pushed (`scclab-[Your_initial]`) and followed by the image name and tag.
+       The image should start with `image-registry.openshift-image-registry.svc:5000/` followed by the name of the project where the images were pushed (`scclab-[Your_initials]`) and followed by the image name and tag.
 
     4. Configure mongodb storage by defining a PersistentVolumeClaim with a specific storageClassName
       
@@ -320,7 +320,7 @@ Then follow the instructions below.
 
        5. Deploy the AcmeAir instance with Semeru Cloud Compiler and InstantON:
             
-          **IMPORTANT**: Please ensure to fill in all `[Your_initial]` fields with the namespace used in the creation step above before proceeding to apply the YAML file.
+          **IMPORTANT**: Please ensure to fill in all `[Your_initials]` fields with the namespace used in the creation step above before proceeding to apply the YAML file.
 
           ```
           kubectl apply -f AcmeAirKN_SCC_InstantON.yaml
@@ -353,12 +353,12 @@ Then follow the instructions below.
 
     2. Verify that the `runJMeter.sh` script contains these service addresses for the JHOST environment variable passed to the JMeter containers:
 
-       **IMPORTANT**: Please ensure to fill in all fields marked as `[Your_initial]` with the namespace used in the creation steps above, and fill in all fields marked as `[OCP server name]` with the OCP server address you created with TechZone (see the example in the comments mentioned in the "Find the external address of the two AcmeAir services" step) before proceeding to run the runJMeter.sh file.
+       **IMPORTANT**: Please ensure to fill in all fields marked as `[Your_initials]` with the namespace used in the creation steps above, and fill in all fields marked as `[OCP server name]` with the OCP server address you created with TechZone (see the example in the comments mentioned in the "Find the external address of the two AcmeAir services" step) before proceeding to run the runJMeter.sh file.
 
        ```
        cat runJMeter.sh | grep JHOST
        ```
-       **Note**: if you selected to start the `AcmeAirKN_SCC_InstantON` service instead of `AcmeAirKN_SCC`, then edit `runJMeter.sh` to comment out the second container invocation (the one with JHOST="acmeair-scc-scclab-[Your_initial].apps.[OCP server name].cloud.techzone.ibm.com") and remove the comment from the third container invocation (the one with JHOST="acmeair-sccio-scclab-[Your_initial].apps.[OCP server name].cloud.techzone.ibm.com").
+       **Note**: if you selected to start the `AcmeAirKN_SCC_InstantON` service instead of `AcmeAirKN_SCC`, then edit `runJMeter.sh` to comment out the second container invocation (the one with JHOST="acmeair-scc-scclab-[Your_initials].apps.[OCP server name].cloud.techzone.ibm.com") and remove the comment from the third container invocation (the one with JHOST="acmeair-sccio-scclab-[Your_initials].apps.[OCP server name].cloud.techzone.ibm.com").
 
     3. Launch jmeter containers:
        ```

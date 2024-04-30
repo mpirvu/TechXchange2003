@@ -4,8 +4,8 @@
 # The script will utilize the CURRENTNS value to substitute the target string. For example, running "./searchReplaceNs.sh scclab-rm" will 
 # replace the scclab-rm with CURRENTNS value.
 
-default_namespace="scclab-[Your_initial]"
-default_service_acct="instanton-sa-[Your_initial]"
+default_namespace="scclab-[Your_initials]"
+default_service_acct="instanton-sa-[Your_initials]"
 
 if [ "$#" -eq 0 ]; then
     old_namespace=$default_namespace
@@ -26,9 +26,9 @@ if [[ -z "${new_namespace}" ]]; then
 fi
 
 for file in "${selected_files[@]}"; do
-    if [ "$old_namespace" == "scclab-[Your_initial]" ]; then
-        sed -i "s/scclab-\[Your_initial\]/$new_namespace/g" "$file"
-        sed -i "s/instanton-sa-\[Your_initial\]/instanton-sa-$new_namespace/g" "$file"
+    if [ "$old_namespace" == "scclab-[Your_initials]" ]; then
+        sed -i "s/scclab-\[Your_initials\]/$new_namespace/g" "$file"
+        sed -i "s/instanton-sa-\[Your_initials\]/instanton-sa-$new_namespace/g" "$file"
     else 
         sed -i "s/$old_namespace/$new_namespace/g" "$file"
         sed -i "s/instanton-sa-$old_namespace/instanton-sa-$new_namespace/g" "$file"
