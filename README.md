@@ -399,4 +399,4 @@ Then follow the instructions below.
 
 ##### Errors found in the JMeter service pod
 
-If there are any errors found in the JMeter service pod logs during the JMeter load test, please note that some of these issues might be transient and could appear due to the heavy loads of traffic. For this exercise, please ignore these transient errors.
+- If there are any errors found in the JMeter service pod logs during the JMeter load test, please note that some of these issues might be transient and could appear due to the heavy loads of traffic. For this exercise, please ignore these transient errors.
