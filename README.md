@@ -374,6 +374,8 @@ Then follow the instructions below.
        podman logs jmeter2
        ```
 
+       > **NOTE**: If you encounter any issues while executing this step, please refer to the [troubleshooting notes](#errors-found-in-the-jmeter-service-pod) provided.
+
     4. Go to the grafana dashboard you configured before and watch the throughput results for the two services.
 
        The AcmeAirEE8 service with Semeru Cloud Compiler should reach peak throughput much faster than the baseline service.
@@ -394,4 +396,7 @@ Then follow the instructions below.
        podman stop influxdb
        ```
 #### Troubleshooting
-- If there are any errors found in the JMeter service pod logs during the JMeter load test, please note that some of these issues might be transient and could appear due to the heavy loads of traffic. For this exercise, please ignore these transient errors.
+
+##### Errors found in the JMeter service pod
+
+If there are any errors found in the JMeter service pod logs during the JMeter load test, please note that some of these issues might be transient and could appear due to the heavy loads of traffic. For this exercise, please ignore these transient errors.
