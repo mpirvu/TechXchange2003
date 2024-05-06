@@ -1,7 +1,7 @@
 # Dockerfile to build a jmeter container able to drive acmeair
 # Results appear on /output in the container
 # Must specify the hostname for the acmeair application (or localhost will be assumed)
-FROM icr.io/appcafe/ibm-semeru-runtimes:open-21-ea-jdk-ubi9
+FROM icr.io/appcafe/ibm-semeru-runtimes:open-17-jdk-ubi
 
 ENV JMETER_VERSION 5.5
 
